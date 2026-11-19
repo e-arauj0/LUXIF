@@ -6,6 +6,8 @@
 	--texto: #000000;
 	--fonte-titulo: "Oswald", sans-serif;
 	--fonte-texto: "Roboto", sans-serif;
+
+	--borda: #000000;
 }
 
 *,
@@ -25,4 +27,60 @@ body {
 h1 {
 	font-family: var(--fonte-titulo);
 	line-height: 1.2;
+}
+
+a {
+	color: var(--destaque);
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+.container {
+	max-width: 1020px;
+	margin: 0 auto;
+	padding: 0 16px;
+}
+
+/* Cabeçalho */
+
+header {
+	border-bottom: 2px solid var(--borda);
+}
+
+header .container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+
+.logo {
+	display: block;
+	height: 30px;
+	width: auto;
+}
+
+nav ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+nav a {
+	display: block;
+	padding: 8px 12px;
+	border-radius: 4px;
+	font-family: var(--fonte-titulo);
+	text-transform: uppercase;
+	text-decoration: none;
+	color: var(--texto);
 }
