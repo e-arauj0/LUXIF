@@ -1,0 +1,28 @@
+:root{
+	--principal: #8D95C7;   /* roxo azulado claro */
+	--secundaria: #A5C78D;  /* verde claro */
+	--destaque: #36472A;    /* verde escuro: links e botões */
+	--fundo: #FFFED9;       /* amarelo claro */
+	--texto: #000000;
+	--fonte-titulo: "Oswald", sans-serif;
+	--fonte-texto: "Roboto", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	background: var(--fundo);
+	color: var(--texto);
+	font-family: var(--fonte-texto);
+	line-height: 1.6;
+}
+
+h1 {
+	font-family: var(--fonte-titulo);
+	line-height: 1.2;
+}
