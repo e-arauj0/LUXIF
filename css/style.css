@@ -162,3 +162,12 @@ footer a {
     opacity: .60;
     background-color: var(--principal);
 }
+
+/* Responsividade */
+
+.duas-colunas {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 32px;
+	align-items: center;
+}

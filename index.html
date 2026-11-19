@@ -42,6 +42,100 @@
 				</p>
 			</div>
 		</section>
+
+		<section id="apresentacao">
+			<div class="container duas-colunas">
+				<div>
+					<h2>Apresentação</h2>
+					<h3>O problema</h3>
+					<p>Medir a intensidade da luz é a base de experimentos de óptica e do controle da iluminação de ambientes. Luxímetros comerciais são caros. Já o LDR, um sensor de luz que custa centavos, tem uma dificuldade: sua resistência varia demais, de algumas centenas de ohms na claridade a centenas de milhares de ohms no escuro. Com um circuito fixo, ele só mede bem uma pequena parte dessa variação.</p>
+					<h3>A solução</h3>
+					<p>O LUXIF combina o LDR com quatro resistores de referência (1 kΩ, 10 kΩ, 100 kΩ e 470 kΩ) e deixa o Arduino escolher qual usar a cada momento, como um multímetro que troca de escala sozinho. Um LED azul mostra a faixa em uso e o display OLED mostra o valor em lux. Na versão com ESP32, o Wi-Fi também envia as leituras para o computador ou o celular.</p>
+				</div>
+				<figure>
+					<img src="imagens/esquema-eletrico.png" alt="Esquema elétrico do LUXIF: Arduino Uno com o LDR, os quatro resistores de referência, os LEDs azuis, o display OLED e a alimentação por bateria de 9 V." width="1271" height="1043">
+					<figcaption>O circuito do LUXIF: o LDR e os resistores de referência medem a luz, os LEDs azuis indicam a faixa em uso e o display OLED mostra a leitura em lux.</figcaption>
+				</figure>
+			</div>
+		</section>
+
+        <section id="objetivos">
+			<div class="container">
+				<h2>Objetivos</h2>
+				<div>
+					<article>
+						<h3>Medir uma faixa ampla de luz</h3>
+						<p>Da penumbra à luz do dia, o LUXIF tem alcance de 1 lux até 1000 lux.</p>
+					</article>
+					<article>
+						<h3>Monitorar a luz natural</h3>
+						<p>Acompanhar como a luz do sol muda ao longo do dia, com leituras registradas a cada meio segundo.</p>
+					</article>
+					<article>
+						<h3>Mostrar a luz ao vivo</h3>
+						<p>Na versão com ESP32, enviar as medições pelo Wi-Fi para o navegador, sem fios e sem instalar nenhum programa.</p>
+					</article>
+					<article>
+						<h3>Ser aberto e replicável</h3>
+						<p>Código, esquema elétrico, lista de materiais e artigo publicados aqui, para quem quiser estudar o projeto ou montar o seu.</p>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<section id="aprenda">
+			<div class="container">
+				<h2>Aprenda montando</h2>
+				<p>O LUXIF também é um projeto para aprender. Ao montá-lo, você pratica divisor de tensão, leitura de sensores analógicos, comunicação I²C e troca automática de escala, conceitos de Física e Eletrônica que aparecem em muitos instrumentos.</p>
+				<div>
+					<article>
+						<h3>1. Entenda</h3>
+						<p>Veja como a luz vira um número em <a href="paginas/funcionamento.html">Como funciona</a>.</p>
+					</article>
+					<article>
+						<h3>2. Monte</h3>
+						<p>Siga o passo a passo em <a href="paginas/montagem.html">Monte o seu</a>, com testes a cada etapa.</p>
+					</article>
+					<article>
+						<h3>3. Programe</h3>
+						<p>Grave o <a href="paginas/codigo.html">Código</a> e leia, função por função, o que ele faz.</p>
+					</article>
+					<article>
+						<h3>4. Experimente</h3>
+						<p>Meça a luz do dia, a distância de uma lâmpada e polarizadores, e acompanhe tudo <a href="paginas/ao-vivo.html">Ao vivo</a>.</p>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<section id="equipe">
+			<div class="container">
+				<h2>Equipe</h2>
+				<div>
+					<article>
+						<h3>Eduardo Luciano Martinez</h3>
+						<p>Gerência e organização do projeto; base teórica e definição dos objetivos de estudo.</p>
+					</article>
+					<article>
+						<h3>Emily Oliveira Araujo</h3>
+						<p>Edição e revisão; validação das informações e das ferramentas matemáticas.</p>
+					</article>
+					<article>
+						<h3>Henrique Ferreira Defavere</h3>
+						<p>Investigação e análise formal; levantamento de dados e ferramentas matemáticas e visuais.</p>
+					</article>
+					<article>
+						<h3>Rafael Shiguemi Usui Ramos</h3>
+						<p>Investigação e análise formal; levantamento de dados e ferramentas matemáticas e visuais.</p>
+					</article>
+					<article>
+						<h3>Vinícius Martins Pereira</h3>
+						<p>Servidor WebSocket em ESP-IDF para a comunicação do ESP32 com a página web.</p>
+					</article>
+				</div>
+				<p>Agradecimentos aos professores Dennis Toufen, Maurício Capelas, Hamilton Piva, Lucineide Pimenta, Jordy Spacca e Wilson Carlos.</p>
+			</div>
+		</section>
     </main>
 
     <footer>
