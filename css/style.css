@@ -8,6 +8,8 @@
 	--fonte-texto: "Roboto", sans-serif;
 
 	--borda: #000000;
+    --rodape-fundo: #0E100A;
+	--rodape-texto: #F2F1DC;
 }
 
 *,
@@ -83,4 +85,16 @@ nav a {
 	text-transform: uppercase;
 	text-decoration: none;
 	color: var(--texto);
+}
+
+/* Rodapé */
+
+footer {
+	padding: 24px 0;
+	background: var(--rodape-fundo);
+	color: var(--rodape-texto);
+}
+
+footer a {
+	color: var(--rodape-texto);
 }
