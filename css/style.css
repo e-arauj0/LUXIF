@@ -46,6 +46,11 @@ img {
 	height: auto;
 }
 
+:focus-visible {
+	outline: 3px solid var(--principal);
+	outline-offset: 2px;
+}
+
 section {
 	padding: 48px 0;
 }
@@ -263,4 +268,19 @@ pre {
 	grid-template-columns: 1fr 1fr;
 	gap: 32px;
 	align-items: center;
+}
+
+@media (max-width: 800px) {
+	nav {
+		order: 3;
+		width: 100%;
+	}
+
+	.duas-colunas {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.abertura h1 {
+		font-size: 2.2rem;
+	}
 }
