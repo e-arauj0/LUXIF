@@ -228,6 +228,34 @@ figcaption {
 	font-size: .9rem;
 }
 
+table {
+	width: 100%;
+	border-collapse: collapse;
+	background: var(--superficie);
+}
+
+th,
+td {
+	padding: 10px 12px;
+	border: 1px solid var(--borda);
+	text-align: left;
+	vertical-align: top;
+}
+
+thead th {
+	background: var(--principal);
+	color: #000000;
+	font-family: var(--fonte-titulo);
+}
+
+pre {
+	padding: 16px;
+	border-radius: 6px;
+	background: #1E2219;
+	color: #EEF0E4;
+	line-height: 1.5;
+}
+
 /* Responsividade */
 
 .duas-colunas {
