@@ -10,6 +10,7 @@
     --sobre-destaque: #FFFED9;
 	--borda: #000000;
 
+	--superficie: #FFFFFF;
     --texto-suave: #45473C;
 
     --rodape-fundo: #0E100A;
@@ -161,6 +162,24 @@ footer a {
 .botao.secundario:hover {
     opacity: .60;
     background-color: var(--principal);
+}
+
+.grade {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 20px;
+}
+
+.cartao {
+	background: var(--superficie);
+	border: 2px solid var(--borda);
+	border-radius: 6px;
+	padding: 20px;
+	box-shadow: 4px 4px 0 var(--destaque);
+}
+
+.cartao h3 {
+	margin-top: 0;
 }
 
 /* Responsividade */
