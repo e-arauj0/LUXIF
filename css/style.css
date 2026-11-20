@@ -10,6 +10,7 @@
     --sobre-destaque: #FFFED9;
 	--borda: #000000;
 
+	--fundo-alternado: #F1F0D0;
 	--superficie: #FFFFFF;
     --texto-suave: #45473C;
 
@@ -53,6 +54,14 @@ section {
 	max-width: 1000px;
 	margin: 0 auto;
 	padding: 0 16px;
+}
+
+section {
+	padding: 48px 0;
+}
+
+section:nth-of-type(even) {
+	background: var(--fundo-alternado);
 }
 
 /* Cabeçalho */
@@ -188,6 +197,35 @@ footer a {
 	border-left: 8px solid var(--principal);
 	border-radius: 6px;
 	background: var(--superficie);
+}
+
+.formula {
+	padding: 16px;
+	border: 2px dashed var(--borda);
+	border-radius: 6px;
+	background: var(--superficie);
+	font-family: monospace;
+	font-size: 1.2rem;
+	text-align: center;
+}
+
+figure {
+	margin: 0;
+	padding: 12px;
+	border: 2px solid var(--borda);
+	border-radius: 6px;
+	background: var(--superficie);
+}
+
+figure img {
+	display: block;
+	margin: 0 auto;
+	background: #FFFFFF;
+}
+
+figcaption {
+	margin-top: 8px;
+	font-size: .9rem;
 }
 
 /* Responsividade */
