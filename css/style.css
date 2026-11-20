@@ -182,6 +182,14 @@ footer a {
 	margin-top: 0;
 }
 
+.aviso {
+	padding: 16px 20px;
+	border: 2px solid var(--borda);
+	border-left: 8px solid var(--principal);
+	border-radius: 6px;
+	background: var(--superficie);
+}
+
 /* Responsividade */
 
 .duas-colunas {
