@@ -28,7 +28,67 @@
         </div>
     </header>
     
-    <main></main>
+    <main>
+        <section>
+			<div class="container">
+				<h1>Documentação</h1>
+				<p class="introducao">O artigo do LUXIF, com a fundamentação teórica, o circuito, a análise das faixas de medição e as referências usadas no projeto.</p>
+				<p>
+					<a class="botao" href="../documento/LUXIF.pdf" target="_blank" rel="noopener">Abrir o PDF</a>
+					<a class="botao secundario" href="../documento/LUXIF.pdf" download>Baixar</a>
+				</p>
+			</div>
+		</section>
+
+		<section id="resumo">
+			<div class="container">
+				<h2>Resumo</h2>
+				<p>A medição da intensidade luminosa é uma etapa importante em experimentos de óptica e em aplicações de monitoramento ambiental. Este trabalho apresenta o hardware do LUXIF, um luxímetro de baixo custo baseado em um sensor fotoresistivo (LDR) de 10 mm, em quatro resistores de referência e em um microcontrolador Arduino Uno, com uma versão em ESP32 que transmite as leituras por Wi-Fi para uma página web. O LDR forma um divisor de tensão com um dos resistores, escolhido automaticamente pelo microcontrolador conforme a leitura do conversor analógico-digital, o que amplia a faixa útil de medição e melhora o aproveitamento da sua resolução. A faixa em uso é indicada por LEDs ligados em saídas próprias, fora do caminho da medição, e o valor calculado em lux é exibido em um display OLED. O circuito é alimentado por uma bateria de 9 V ligada ao conector de alimentação da placa. A análise teórica indica que as quatro faixas se sobrepõem e cobrem, juntas, resistências de cerca de 100 Ω a 4 MΩ, tornando a arquitetura adequada para aplicações didáticas e experimentais.</p>
+				<p><strong>Palavras-chave:</strong> fotoresistor; instrumentação eletrônica; divisor de tensão; iluminância; Arduino; ESP32; sensores.</p>
+			</div>
+		</section>
+
+		<section id="artigo">
+			<div class="container">
+				<h2>Artigo completo</h2>
+				<iframe src="../documento/LUXIF.pdf" title="Artigo do LUXIF em PDF" width="100%" height="800"></iframe>
+			</div>
+		</section>
+
+		<section id="figuras">
+			<div class="container">
+				<h2>Figuras</h2>
+				<div class="grade">
+					<figure>
+						<a href="../imagens/grafico-ldr.png" target="_blank" rel="noopener"><img src="../imagens/grafico-ldr.png" alt="Curva da resistência do LDR em função da iluminância." width="757" height="435" loading="lazy"></a>
+						<figcaption>Figura 1 — Curva de resistência do LDR em função da iluminância.</figcaption>
+					</figure>
+					<figure>
+						<a href="../imagens/grafico-divisor.png" target="_blank" rel="noopener"><img src="../imagens/grafico-divisor.png" alt="Curvas da tensão do divisor para os quatro resistores de referência." width="737" height="433" loading="lazy"></a>
+						<figcaption>Figura 2 — Tensão no divisor em função da resistência do LDR, para cada resistor de referência.</figcaption>
+					</figure>
+					<figure>
+						<a href="../imagens/esquema-eletrico.png" target="_blank" rel="noopener"><img src="../imagens/esquema-eletrico.png" alt="Esquema elétrico do LUXIF." width="961" height="779" loading="lazy"></a>
+						<figcaption>Figura 3 — Esquema elétrico do LUXIF.</figcaption>
+					</figure>
+				</div>
+			</div>
+		</section>
+
+		<section id="referencias">
+			<div class="container">
+				<h2>Referências</h2>
+				<ul>
+					<li>HALLIDAY, David; RESNICK, Robert; WALKER, Jearl. <strong>Fundamentos de Física</strong>: Óptica e Física Moderna. 10. ed. Rio de Janeiro: LTC, 2016.</li>
+					<li>SCHERZ, Paul; MONK, Simon. <strong>Practical Electronics for Inventors</strong>. 3. ed. New York: McGraw-Hill Education TAB, 2013.</li>
+					<li>ARDUINO. <strong>Arduino Uno Rev3</strong>: documentação técnica. [S.l.]: Arduino, [s.d.]. Disponível em: <a href="https://docs.arduino.cc/hardware/uno-rev3/" target="_blank" rel="noopener">docs.arduino.cc</a>.</li>
+					<li>ESPRESSIF SYSTEMS. <strong>ESP32 Series Datasheet</strong>. Xangai: Espressif Systems, [s.d.]. Disponível em: <a href="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf" target="_blank" rel="noopener">espressif.com</a>.</li>
+					<li>OASIS. <strong>MQTT Version 3.1.1</strong>. OASIS Standard, 2014. Disponível em: <a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html" target="_blank" rel="noopener">docs.oasis-open.org</a>.</li>
+					<li>FETTE, Ian; MELNIKOV, Alexey. <strong>RFC 6455</strong>: The WebSocket Protocol. Internet Engineering Task Force, 2011. Disponível em: <a href="https://www.rfc-editor.org/rfc/rfc6455" target="_blank" rel="noopener">rfc-editor.org</a>.</li>
+				</ul>
+			</div>
+		</section>
+    </main>
 
     <footer>
 		<div class="container">
