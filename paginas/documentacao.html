@@ -8,10 +8,11 @@
     <link rel="icon" href="../icones/icone.png" type="image/png">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&amp;family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+	<script src="../js/tema.js"></script>
 </head>
 <body>
     <header>
-        <div class="container">
+        <div class="painel">
             <a href="../index.html"><img class="logo" src="../imagens/logo.svg" alt="Logo LUXIF — página inicial"></a>
             <nav>
                 <ul>
@@ -25,6 +26,12 @@
                     <li><a href="equipe.html">Nosso time</a></li>
                 </ul>
             </nav>
+			<div class="ferramentas">
+				<div class="seletor-tema" role="group" aria-label="Tema do site">
+					<button type="button" data-escolha="claro" aria-pressed="true" aria-label="Tema claro" title="Tema claro"><img src="../icones/claro.svg" alt="" class="icone"></button>	
+					<button type="button" data-escolha="escuro" aria-pressed="false" aria-label="Tema escuro" title="Tema claro"><img src="../icones/escuro.svg" alt="" class="icone"></button>				
+				</div>
+			</div>
         </div>
     </header>
     
