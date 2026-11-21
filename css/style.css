@@ -155,8 +155,10 @@ nav a[aria-current="page"] {
 	display: block; 
 }
 
-[data-tema="escuro"] [data-escolha="escuro"] .icone {
-  filter: invert(1);
+/* Os SVGs são pretos. Botão ativo tem fundo escuro no tema claro e claro no tema escuro; o inativo é o contrário. */
+[data-tema="claro"] button[aria-pressed="true"] .icone,
+[data-tema="escuro"] button[aria-pressed="false"] .icone {
+	filter: invert(1);
 }
 
 .indicador-luxif {
@@ -575,4 +577,8 @@ details summary {
 	.abertura h1 {
 		font-size: 2.2rem;
 	}
+}
+
+.tabela-rolagem {
+	overflow-x: auto;
 }

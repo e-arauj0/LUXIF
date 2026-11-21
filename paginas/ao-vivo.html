@@ -27,8 +27,10 @@
                 </ul>
             </nav>
             <div class="ferramentas">
+				<a class="indicador-luxif" href="ao-vivo.html" title="Leitura atual do LUXIF" hidden><span></span></a>
 				<div class="seletor-tema" role="group" aria-label="Tema do site">
-					<button type="button" data-escolha="claro" aria-pressed="true" aria-label="Tema claro" title="Tema claro"><img src="../icones/claro.svg" alt="" class="icone"></button>	
+					<button type="button" data-escolha="claro" aria-pressed="false" aria-label="Tema claro" title="Tema claro"><img src="../icones/claro.svg" alt="" class="icone"></button>	
+					<button type="button" data-escolha="auto" aria-pressed="true" aria-label="Tema auto" title="Tema auto"><img src="../icones/auto.svg" alt="" class="icone"></button>	
 					<button type="button" data-escolha="escuro" aria-pressed="false" aria-label="Tema escuro" title="Tema escuro"><img src="../icones/escuro.svg" alt="" class="icone"></button>				
 				</div>
 			</div>
@@ -56,6 +58,7 @@
 							<label for="endereco">Endereço do LUXIF</label>
 							<input type="text" id="endereco" placeholder="192.168.0.10" autocomplete="off" spellcheck="false">
 						</div>
+						<p class="aviso" id="aviso-https" hidden>Este site está em HTTPS, e o navegador bloqueia conexões <code>ws://</code> diretas ao LUXIF. Use <strong>Pela internet</strong> ou abra o site por <code>http://</code> na mesma rede.</p>
 						<button class="botao" type="submit">Conectar</button>
 						<button class="botao secundario" type="button" id="botao-simular">Simular</button>
 						<button class="botao secundario" type="button" id="botao-desconectar" disabled>Desconectar</button>
@@ -168,5 +171,7 @@
 			<p>&copy; 2026 LUXIF. Projeto integrador — IFSP Guarulhos.</p>
 		</div>
 	</footer>
+	<script src="../js/luxif.js"></script>
+	<script src="../js/ao-vivo.js"></script>
 </body>
 </html>
