@@ -41,7 +41,7 @@
         <section>
 			<div class="container">
 				<h1>Como funciona</h1>
-				<p class="introducao">Do sensor ao número na tela: veja como o LUXIF transforma luz em uma medida em lux.</p>
+				<p class="introducao">Do sensor ao número na tela: veja como o LUXIF transforma luz em uma medida em lux. A ideia é entender o princípio, para poder montar o seu e melhorá-lo.</p>
 			</div>
 		</section>
 
@@ -99,19 +99,56 @@
 					<li>mostra o resultado no display, com o LED da faixa aceso.</li>
 				</ol>
 				<div class="aviso">
-					<strong>Ajuste para o seu sensor:</strong> dois LDRs do mesmo modelo podem ter curvas diferentes. As constantes A e γ do código são os valores típicos do datasheet e podem ser ajustadas ao seu sensor, comparando as leituras com as de outro luxímetro.
+					<strong>Ajuste para o seu sensor:</strong> dois LDRs do mesmo modelo podem ter curvas diferentes. As constantes A e γ do código são valores típicos e podem ser ajustadas ao seu sensor, como explicado em <a href="#calibracao">Como ajustar ao seu sensor</a>.
 				</div>
 			</div>
 		</section>
 
 		<section id="alcance">
 			<div class="container">
-				<h2>Alcance e consumo</h2>
+				<h2>Alcance estimado</h2>
+				<p>O código só calcula o lux quando a leitura N está entre 100 e 920. Pelo divisor, R<sub>LDR</sub> = R<sub>n</sub> × N ÷ (1023 − N), então, em cada faixa, a resistência do LDR vai de 0,108 × R<sub>n</sub> (N = 100) a 8,93 × R<sub>n</sub> (N = 920). Convertendo com a curva do código (A = 75 000 Ω e γ = 0,7), L = (A ÷ R<sub>LDR</sub>)<sup>1/γ</sup>:</p>
+				<div class="tabela-rolagem">
+					<table>
+						<thead>
+							<tr><th>Resistor (R<sub>n</sub>)</th><th>R<sub>LDR</sub> medida</th><th>Lux (estimativa teórica)</th></tr>
+						</thead>
+						<tbody>
+							<tr><td>1 kΩ</td><td>108 Ω a 8,9 kΩ</td><td>de 21 a 11 400</td></tr>
+							<tr><td>10 kΩ</td><td>1,08 kΩ a 89 kΩ</td><td>de 0,8 a 430</td></tr>
+							<tr><td>100 kΩ</td><td>10,8 kΩ a 893 kΩ</td><td>de 0,03 a 16</td></tr>
+							<tr><td>470 kΩ</td><td>51 kΩ a 4,2 MΩ</td><td>de 0,003 a 1,7</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p>As quatro faixas se sobrepõem, o que evita "buracos" na medição, e juntas cobrem de cerca de <strong>0,003 a 11 000 lux</strong>, da penumbra à claridade. Esses números são uma <strong>estimativa teórica</strong>, calculada com as constantes típicas do código. Na prática, o alcance real depende do seu LDR, e as medidas nas pontas da escala são as menos confiáveis (veja as limitações abaixo). Para medir a luz do sol direta, que passa de 30 000 lux, coloque um filtro difusor na frente do sensor.</p>
+				<p>Com o Arduino Uno, uma bateria de 9 V dura várias horas. A versão com ESP32 consome mais por causa do Wi-Fi; para uso prolongado, alimente-a pela USB ou por uma fonte.</p>
+			</div>
+		</section>
+
+		<section id="calibracao">
+			<div class="container">
+				<h2>Como ajustar ao seu sensor</h2>
+				<p>As constantes A e γ do código são valores típicos. Dois LDRs do mesmo modelo podem ter curvas bem diferentes, então, para valores melhores, compare o seu LUXIF com um luxímetro de referência. Tomando o logaritmo da curva do sensor, R = A × L<sup>−γ</sup> vira uma reta:</p>
+				<p class="formula">ln R = ln A − γ × ln L</p>
+				<p>Meça a resistência do LDR em duas iluminâncias conhecidas, (L<sub>1</sub>, R<sub>1</sub>) e (L<sub>2</sub>, R<sub>2</sub>), calculando cada R pela fórmula do divisor. Então:</p>
+				<p class="formula">γ = ln(R<sub>1</sub> ÷ R<sub>2</sub>) ÷ ln(L<sub>2</sub> ÷ L<sub>1</sub>) &nbsp;&nbsp; e &nbsp;&nbsp; A = R<sub>1</sub> × L<sub>1</sub><sup>γ</sup></p>
+				<p>Para conferir a conta, use os pontos da Figura 1: 75 kΩ em 1 lux e cerca de 120 Ω em 10 000 lux dão γ = ln(625) ÷ ln(10 000) ≈ 0,70 e A = 75 000 Ω, os valores do código. Troque as constantes <code>A</code> e <code>GAMA</code> pelas suas e grave de novo.</p>
+			</div>
+		</section>
+
+		<section id="limitacoes">
+			<div class="container">
+				<h2>Limitações</h2>
+				<p>O LUXIF é uma base para aprender a montar um luxímetro, não um instrumento de precisão. Vale conhecer o que limita a exatidão:</p>
 				<ul>
-					<li><strong>Alcance:</strong> o LUXIF trabalha de cerca de 1 a 1000 lux, do ambiente escuro à sala bem iluminada. Para medir a luz do sol direta, que passa de 30 000 lux, coloque um filtro difusor na frente do sensor.</li>
-					<li><strong>Ajuste da curva:</strong> as constantes A e γ do código vêm do datasheet do LDR. Para ajustar a um sensor específico, basta alterar essas duas constantes.</li>
-					<li><strong>Bateria:</strong> com o Arduino Uno, uma bateria de 9 V dura várias horas. A versão com ESP32 consome mais por causa do Wi-Fi; para uso prolongado, alimente-a pela USB ou por uma fonte.</li>
+					<li><strong>O sensor.</strong> O LDR não segue exatamente a lei de potência em toda a escala, muda um pouco com a temperatura e responde devagar a variações de luz (o tempo depende do modelo; veja o datasheet). Ele também não reage às cores como o olho humano: luzes de LED, fluorescentes e do sol podem dar leituras diferentes para a mesma iluminância.</li>
+					<li><strong>A leitura analógica.</strong> O datasheet do ATmega328P, o microcontrolador do Uno, recomenda que o sinal lido pelo ADC tenha impedância de cerca de 10 kΩ ou menos. Nas faixas de 100 kΩ e 470 kΩ, com o LDR no escuro, a impedância é muito maior, e a leitura fica menos exata. A média de 10 leituras e a espera de 10 ms depois de trocar de faixa ajudam, mas não eliminam o problema.</li>
+					<li><strong>Sem capacitor em A0.</strong> Parece uma boa ideia filtrar o ruído com um capacitor, mas com resistências de até alguns MΩ, um capacitor de 100 nF formaria um filtro RC de constante de tempo da ordem de 0,4 s, muito maior que os 10 ms de espera do código, e a leitura ficaria errada logo depois de cada troca de faixa.</li>
+					<li><strong>O pino de saída.</strong> A saída do Arduino que fornece os 5 V tem uma resistência interna de algumas dezenas de ohms, que se soma ao resistor de referência. Na faixa de 1 kΩ isso já pesa alguns por cento.</li>
+					<li><strong>A calibração.</strong> Sem comparar com um luxímetro de referência, os valores em lux são estimativas.</li>
 				</ul>
+				<p>Cada limitação dessas é também um ponto de partida para melhorar o projeto: trocar o sensor, calibrar, filtrar o sinal ou usar um conversor externo.</p>
 			</div>
 		</section>
     </main>

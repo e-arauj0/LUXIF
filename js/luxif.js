@@ -3,7 +3,7 @@ const luxif = {
 	mensagem: "Desconectado.",
 	ultimaLeitura: null,
 
-	// A página Ao vivo troca estas funções para mostrar os dados
+	// A página Internet (ESP32) troca estas funções para mostrar os dados
 	aoMudarEstado: function () {},
 	aoReceberLeitura: function () {},
 	aoReceberMensagem: function () {}

@@ -41,7 +41,7 @@
         <section>
 			<div class="container">
 				<h1>Monte o seu LUXIF</h1>
-				<p class="introducao">Um guia passo a passo para montar, gravar e testar o seu luxímetro, explicando o porquê de cada ligação. Ao final, você terá um instrumento funcionando e terá praticado conceitos de Física e Eletrônica.</p>
+				<p class="introducao">Um guia passo a passo para montar, gravar e testar o seu luxímetro, explicando o porquê de cada ligação. Ao final, você terá um instrumento funcionando e terá praticado conceitos de Física e Eletrônica. O foco é um luxímetro simples, com Arduino e bateria, que serve de base para você melhorar; ele não é um instrumento de precisão. A versão com Wi-Fi (ESP32) é uma extensão opcional, no final da página.</p>
 				<p>
 					<a class="botao" href="#passos">Ir para a montagem</a>
 					<a class="botao secundario" href="componentes.html#materiais">Lista de materiais</a>
@@ -66,8 +66,8 @@
 						<p>Como o programa decide, sozinho, qual resistor usar, como um multímetro com escala automática.</p>
 					</article>
 					<article class="cartao">
-						<h3>Display e Wi-Fi</h3>
-						<p>Como falar com um display pelo barramento I²C e, na versão com ESP32, enviar as leituras para o navegador.</p>
+						<h3>Display e I²C</h3>
+						<p>Como falar com um display pelo barramento I²C, que usa só dois fios, e mostrar o valor medido.</p>
 					</article>
 				</div>
 			</div>
@@ -83,6 +83,7 @@
 						<li>Monte primeiro numa protoboard. Só depois de tudo funcionar, passe para a placa perfurada e solde.</li>
 						<li>Durante os testes, alimente o Arduino pelo cabo USB. A bateria entra só no último passo.</li>
 						<li>Um multímetro ajuda bastante, mas não é obrigatório.</li>
+						<li>O ESP32 não é necessário: ele só entra na extensão opcional do final da página.</li>
 					</ul>
 				</div>
 				<div class="aviso">
@@ -163,7 +164,7 @@
 				</details>
 				<details>
 					<summary>O valor em lux é diferente do de outro luxímetro</summary>
-					<p>Os LDRs variam de um para outro. Ajuste as constantes <code>A</code> e <code>GAMA</code> no código para o seu sensor, como explicado em <a href="funcionamento.html#alcance">Como funciona</a>.</p>
+					<p>Os LDRs variam de um para outro. Ajuste as constantes <code>A</code> e <code>GAMA</code> no código para o seu sensor, como explicado em <a href="funcionamento.html#calibracao">Como funciona</a>.</p>
 				</details>
 			</div>
 		</section>
@@ -174,7 +175,7 @@
 				<div class="grade">
 					<article class="cartao">
 						<h3>A luz ao longo do dia</h3>
-						<p>Deixe o LUXIF perto de uma janela e acompanhe, na página <a href="ao-vivo.html">Ao vivo</a>, como a iluminância muda do amanhecer ao anoitecer.</p>
+						<p>Deixe o LUXIF perto de uma janela e anote o valor do display de hora em hora, do amanhecer ao anoitecer. Com a extensão ESP32, a página <a href="ao-vivo.html">Internet (ESP32)</a> acompanha isso para você.</p>
 					</article>
 					<article class="cartao">
 						<h3>Distância da lâmpada</h3>
@@ -185,8 +186,8 @@
 						<p>Coloque dois filtros polarizadores entre uma luz e o sensor e gire um deles. A intensidade segue a lei de Malus: I = I<sub>0</sub> cos²θ. Faça um gráfico de lux por ângulo.</p>
 					</article>
 					<article class="cartao">
-						<h3>Tema que reage à luz</h3>
-						<p>Com o LUXIF conectado, escolha o tema Auto do site e cubra o sensor: o site escurece abaixo de 50 lux e clareia acima de 100.</p>
+						<h3>Tema que reage à luz (extensão)</h3>
+						<p>Com a extensão ESP32 conectada, escolha o tema Auto do site e cubra o sensor: o site escurece abaixo de 50 lux e clareia acima de 100.</p>
 					</article>
 				</div>
 			</div>
@@ -194,13 +195,14 @@
 
 		<section id="esp32">
 			<div class="container">
-				<h2>Montando a versão com Wi-Fi (ESP32)</h2>
+				<h2>Extensão opcional: versão com Wi-Fi (ESP32)</h2>
+				<p>Esta parte foi acrescentada por causa de um projeto de extensão. Só faça depois que o luxímetro com Arduino estiver funcionando.</p>
 				<ol>
 					<li>Faça as mesmas ligações dos passos 1 a 4, usando os pinos do ESP32 da tabela em <a href="componentes.html#versao-wifi">Componentes</a>. O display usa 3V3 em vez de 5V.</li>
 					<li>Na Arduino IDE, instale a placa <strong>esp32</strong> e as bibliotecas <strong>PubSubClient</strong> e <strong>WebSockets</strong>, além das do display.</li>
 					<li>No arquivo <code>luxif_wifi.ino</code>, troque <code>nome-da-rede</code> e <code>senha-da-rede</code> pelos dados do seu Wi-Fi de 2,4 GHz. Não publique esse arquivo com a senha preenchida.</li>
 					<li>Grave o código. No display, o rodapé mostra o endereço IP do ESP32 e a palavra "web" quando ele está conectado ao servidor MQTT.</li>
-					<li>Abra a página <a href="ao-vivo.html">Ao vivo</a> e conecte-se, pela internet ou pelo endereço IP, como explicado lá.</li>
+					<li>Abra a página <a href="ao-vivo.html">Internet (ESP32)</a> e conecte-se, pela internet ou pelo endereço IP, como explicado lá.</li>
 				</ol>
 			</div>
 		</section>
@@ -216,6 +218,7 @@
 					<li>Por que um único resistor basta para os quatro LEDs? O que mudaria se o programa acendesse dois ao mesmo tempo?</li>
 					<li>Por que usar 10 leituras e tirar a média em vez de uma só?</li>
 					<li>No gráfico de resistência do LDR em escala logarítmica, por que a curva é uma reta?</li>
+					<li>Como você calibraria o seu LUXIF comparando com um luxímetro de referência? Quais constantes do código mudariam?</li>
 				</ul>
 				<p>As respostas estão nas páginas <a href="funcionamento.html">Como funciona</a> e <a href="codigo.html">Código</a> e no <a href="documentacao.html">artigo</a>.</p>
 			</div>

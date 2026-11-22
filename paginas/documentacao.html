@@ -41,29 +41,17 @@
         <section>
 			<div class="container">
 				<h1>Documentação</h1>
-				<p class="introducao">O artigo do LUXIF, com a fundamentação teórica, o circuito, a análise das faixas de medição e as referências usadas no projeto.</p>
-				<p>
-					<a class="botao" href="../documento/LUXIF.pdf" target="_blank" rel="noopener">Abrir o PDF</a>
-					<a class="botao secundario" href="../documento/LUXIF.pdf" download>Baixar</a>
-				</p>
+				<p class="introducao">Resumo, figuras e referências do LUXIF: a fundamentação teórica, o circuito e a análise das faixas de medição de um luxímetro simples e replicável.</p>
 			</div>
 		</section>
 
 		<section id="resumo">
 			<div class="container">
 				<h2>Resumo</h2>
-				<p>A medição da intensidade luminosa é uma etapa importante em experimentos de óptica e em aplicações de monitoramento ambiental. Este trabalho apresenta o hardware do LUXIF, um luxímetro de baixo custo baseado em um sensor fotoresistivo (LDR) de 10 mm, em quatro resistores de referência e em um microcontrolador Arduino Uno, com uma versão em ESP32 que transmite as leituras por Wi-Fi para uma página web. O LDR forma um divisor de tensão com um dos resistores, escolhido automaticamente pelo microcontrolador conforme a leitura do conversor analógico-digital, o que amplia a faixa útil de medição e melhora o aproveitamento da sua resolução. A faixa em uso é indicada por LEDs ligados em saídas próprias, fora do caminho da medição, e o valor calculado em lux é exibido em um display OLED. O circuito é alimentado por uma bateria de 9 V ligada ao conector de alimentação da placa. A análise teórica indica que as quatro faixas se sobrepõem e cobrem, juntas, resistências de cerca de 100 Ω a 4 MΩ, tornando a arquitetura adequada para aplicações didáticas e experimentais.</p>
+				<p>A medição da intensidade luminosa é uma etapa importante em experimentos de óptica e em aplicações de monitoramento ambiental, mas luxímetros comerciais são caros. Este trabalho apresenta o LUXIF, um projeto que mostra como montar um luxímetro simples e replicável, com microcontrolador e bateria, sem a pretensão de ser um instrumento de precisão. O sensor é um fotoresistor (LDR) de 10 mm, que forma um divisor de tensão com um entre quatro resistores de referência, escolhido automaticamente por um Arduino Uno conforme a leitura do conversor analógico-digital, o que amplia a faixa útil de medição e melhora o aproveitamento da sua resolução. A faixa em uso é indicada por LEDs que compartilham um único resistor, e o valor calculado em lux é exibido em um display OLED. O circuito é alimentado por uma bateria de 9 V ligada ao conector de alimentação da placa. A análise teórica indica que as quatro faixas se sobrepõem e cobrem, juntas, resistências de cerca de 100 Ω a 4 MΩ, o que corresponde a cerca de 0,003 a 11 000 lux. Por causa de um projeto de extensão, acrescentou-se uma versão opcional com ESP32, que transmite as leituras por Wi-Fi para uma página web.</p>
 				<p><strong>Palavras-chave:</strong> fotoresistor; instrumentação eletrônica; divisor de tensão; iluminância; Arduino; ESP32; sensores.</p>
 			</div>
 		</section>
-
-		<section id="artigo">
-			<div class="container">
-				<h2>Artigo completo</h2>
-				<iframe src="../documento/LUXIF.pdf" title="Artigo do LUXIF em PDF" width="100%" height="800"></iframe>
-			</div>
-		</section>
-
 		<section id="figuras">
 			<div class="container">
 				<h2>Figuras</h2>

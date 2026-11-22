@@ -41,20 +41,21 @@
         <section>
 			<div class="container">
 				<h1>Componentes</h1>
-				<p class="introducao">Lista de componentes e explicação de como montar o seu próprio LUXIF!</p>
+				<p class="introducao">O que você precisa para montar o luxímetro: lista de materiais, esquema elétrico e ligações pino a pino. Tudo é barato e fácil de achar. A versão com ESP32 é opcional e fica no final da página.</p>
 			</div>
 		</section>
 
 		<section id="materiais">
 			<div class="container">
 				<h2>Lista de materiais</h2>
+				<p>Esta lista monta o luxímetro completo, só com o Arduino e a bateria.</p>
 				<div class="tabela-rolagem">
 					<table>
 						<thead>
 							<tr><th>Componente</th><th>Qtd.</th><th>Função</th><th>Observação</th></tr>
 						</thead>
 						<tbody>
-							<tr><td>Arduino Uno</td><td>1</td><td>Trocar as faixas, ler o sensor e calcular o lux</td><td>Para a versão com Wi-Fi, use um ESP32 (veja abaixo)</td></tr>
+							<tr><td>Arduino Uno</td><td>1</td><td>Trocar as faixas, ler o sensor e calcular o lux</td><td>Na extensão com Wi-Fi, ele é trocado por um ESP32 (veja no final)</td></tr>
 							<tr><td>LDR 10 mm</td><td>1</td><td>Mudar a resistência conforme a luz</td><td>Pode ser substituído por um LDR de 5 mm</td></tr>
 							<tr><td>Resistor de 1 kΩ</td><td>1</td><td>Referência da faixa de muita luz</td><td>—</td></tr>
 							<tr><td>Resistor de 10 kΩ</td><td>1</td><td>Referência da segunda faixa</td><td>—</td></tr>
@@ -124,8 +125,8 @@
 
 		<section id="versao-wifi">
 			<div class="container">
-				<h2>Versão com Wi-Fi (ESP32)</h2>
-				<p>Para acompanhar as leituras na página <a href="ao-vivo.html">Ao vivo</a>, troque o Arduino Uno por um ESP32. O circuito é o mesmo; mudam só os pinos:</p>
+				<h2>Extensão opcional: versão com Wi-Fi (ESP32)</h2>
+				<p>Esta parte é opcional e foi acrescentada por causa de um projeto de extensão: o luxímetro funciona sem ela. Para enviar as leituras pela internet, na página <a href="ao-vivo.html">Internet (ESP32)</a>, troque o Arduino Uno por um ESP32. O circuito é o mesmo; mudam só os pinos:</p>
 				<div class="tabela-rolagem">
 					<table>
 						<thead>

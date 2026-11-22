@@ -95,6 +95,27 @@
 			</div>
 		</section>
 
+		<section id="ajustes">
+			<div class="container">
+				<h2>O que você pode ajustar</h2>
+				<p>O código foi escrito para ser fácil de adaptar. As constantes que você mais vai querer mudar ficam no começo do arquivo:</p>
+				<div class="tabela-rolagem">
+					<table>
+						<thead>
+							<tr><th>Constante</th><th>Para que serve</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><code>A</code> e <code>GAMA</code></td><td>A curva do seu LDR. Ajuste depois de comparar com um luxímetro de referência, como explicado em <a href="funcionamento.html#calibracao">Como funciona</a>.</td></tr>
+							<tr><td><code>RESISTORES</code> e <code>NOMES_FAIXA</code></td><td>Os valores dos resistores de referência. Se usar outros, mude os dois vetores.</td></tr>
+							<tr><td><code>LIMITE_ALTO</code> e <code>LIMITE_BAIXO</code></td><td>As leituras (0 a 1023) que disparam a troca de faixa.</td></tr>
+							<tr><td><code>PINOS_FAIXA</code> e <code>PINOS_LED</code></td><td>Os pinos dos resistores de referência e dos LEDs, se você ligar de outro jeito.</td></tr>
+							<tr><td><code>SCREEN_ADDR</code></td><td>O endereço I²C do display: 0x3C na maioria dos módulos, 0x3D em alguns.</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+
 		<section id="codigo-completo">
 			<div class="container">
 				<h2>Código completo</h2>
@@ -293,8 +314,8 @@ void loop() {
 
 		<section id="versao-wifi">
 			<div class="container">
-				<h2>Versão com Wi-Fi (ESP32)</h2>
-				<p>Para usar a página <a href="ao-vivo.html">Ao vivo</a>, existe uma versão do código para o ESP32. Ela segue a mesma lógica, com estas diferenças:</p>
+				<h2>Extensão opcional: versão com Wi-Fi (ESP32)</h2>
+				<p>Esta parte foi acrescentada por causa de um projeto de extensão e não é necessária para o luxímetro. Para usar a página <a href="ao-vivo.html">Internet (ESP32)</a>, existe uma versão do código para o ESP32. Ela segue a mesma lógica, com estas diferenças:</p>
 				<ul>
 					<li>usa os pinos do ESP32 (veja a tabela em <a href="componentes.html#versao-wifi">Componentes</a>);</li>
 					<li>a leitura vai de 0 a 4095, então os limites passam a ser 400 e 3700; o rodapé do display mostra o endereço IP em vez das faixas;</li>
@@ -302,6 +323,7 @@ void loop() {
 					<li>também aceita conexões direto pela rede local (WebSocket em <code>ws://IP/ws</code>, porta 80, o mesmo endereço do servidor ESP-IDF do Vinícius), para usar sem internet. O site envia a mensagem <code>conectado</code> ao abrir a conexão, como o servidor dele espera.</li>
 				</ul>
 				<p>Para gravar, instale a placa <strong>esp32</strong> (da Espressif Systems) no Gerenciador de Placas e, no Gerenciador de Bibliotecas, as bibliotecas <strong>PubSubClient</strong>, de Nick O'Leary (MQTT), e <strong>WebSockets</strong>, de Markus Sattler (rede local), além das duas do display. Antes de carregar, troque <code>nome-da-rede</code> e <code>senha-da-rede</code> pelos dados do seu Wi-Fi.</p>
+				<p>Ela foi escrita antes das últimas mudanças da versão do Arduino: não tem a animação de abertura, e o display mostra "Mto Escuro" e "Mto Claro" em vez de "Excedido".</p>
 				<p><a class="botao secundario" href="../codigo/luxif_wifi/luxif_wifi.ino" download>Baixar a versão com Wi-Fi</a></p>
 			</div>
 		</section>
