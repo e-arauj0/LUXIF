@@ -99,7 +99,7 @@
 					<li>mostra o resultado no display, com o LED da faixa aceso.</li>
 				</ol>
 				<div class="aviso">
-					<strong>Ajuste para o seu sensor:</strong> dois LDRs do mesmo modelo podem ter curvas diferentes. As constantes A e γ do código são valores típicos e podem ser ajustadas ao seu sensor, como explicado em <a href="#calibracao">Como ajustar ao seu sensor</a>.
+					<strong>Ajuste para o seu sensor:</strong> os valores de A e γ do código são típicos e podem não servir ao seu LDR. Veja como ajustá-los em <a href="#calibracao">Como ajustar ao seu sensor</a>.
 				</div>
 			</div>
 		</section>
@@ -122,7 +122,7 @@
 					</table>
 				</div>
 				<p>As quatro faixas se sobrepõem, o que evita "buracos" na medição, e juntas cobrem de cerca de <strong>0,003 a 11 000 lux</strong>, da penumbra à claridade. Esses números são uma <strong>estimativa teórica</strong>, calculada com as constantes típicas do código. Na prática, o alcance real depende do seu LDR, e as medidas nas pontas da escala são as menos confiáveis (veja as limitações abaixo). Para medir a luz do sol direta, que passa de 30 000 lux, coloque um filtro difusor na frente do sensor.</p>
-				<p>Com o Arduino Uno, uma bateria de 9 V dura várias horas. A versão com ESP32 consome mais por causa do Wi-Fi; para uso prolongado, alimente-a pela USB ou por uma fonte.</p>
+				<p><strong>Bateria.</strong> Com o Arduino Uno, uma bateria de 9 V dura várias horas. A versão com ESP32 consome mais por causa do Wi-Fi; para uso prolongado, alimente-a pela USB ou por uma fonte.</p>
 			</div>
 		</section>
 
@@ -146,9 +146,9 @@
 					<li><strong>A leitura analógica.</strong> O datasheet do ATmega328P, o microcontrolador do Uno, recomenda que o sinal lido pelo ADC tenha impedância de cerca de 10 kΩ ou menos. Nas faixas de 100 kΩ e 470 kΩ, com o LDR no escuro, a impedância é muito maior, e a leitura fica menos exata. A média de 10 leituras e a espera de 10 ms depois de trocar de faixa ajudam, mas não eliminam o problema.</li>
 					<li><strong>Sem capacitor em A0.</strong> Parece uma boa ideia filtrar o ruído com um capacitor, mas com resistências de até alguns MΩ, um capacitor de 100 nF formaria um filtro RC de constante de tempo da ordem de 0,4 s, muito maior que os 10 ms de espera do código, e a leitura ficaria errada logo depois de cada troca de faixa.</li>
 					<li><strong>O pino de saída.</strong> A saída do Arduino que fornece os 5 V tem uma resistência interna de algumas dezenas de ohms, que se soma ao resistor de referência. Na faixa de 1 kΩ isso já pesa alguns por cento.</li>
-					<li><strong>A calibração.</strong> Sem comparar com um luxímetro de referência, os valores em lux são estimativas.</li>
+					<li><strong>A calibração.</strong> Sem comparar com um luxímetro de referência, os valores em lux são estimativas (veja a seção anterior).</li>
 				</ul>
-				<p>Cada limitação dessas é também um ponto de partida para melhorar o projeto: trocar o sensor, calibrar, filtrar o sinal ou usar um conversor externo.</p>
+				<p>Cada limitação aponta uma melhoria possível: trocar o LDR por outro sensor de luz, calibrar contra uma referência ou colocar um amplificador de ganho unitário (buffer) antes de A0, para que o ADC enxergue uma impedância baixa.</p>
 			</div>
 		</section>
     </main>

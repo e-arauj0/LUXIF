@@ -364,7 +364,12 @@ thead th {
 	font-family: var(--fonte-titulo);
 }
 
+:not(pre) > code {
+	overflow-wrap: anywhere;
+}
+
 pre {
+	overflow-x: auto;
 	padding: 16px;
 	border-radius: 6px;
 	background: #1E2219;
@@ -576,6 +581,18 @@ details summary {
 	grid-template-columns: 1fr 1fr;
 	gap: 32px;
 	align-items: center;
+}
+
+/* Em telas estreitas o cabeçalho acompanha a largura da tela, em vez de forçar 1000 px */
+@media (max-width: 1040px) {
+	header .painel {
+		min-width: 0;
+		width: 100%;
+		box-sizing: border-box;
+		padding-left: 16px;
+		padding-right: 16px;
+		gap: 12px 30px;
+	}
 }
 
 @media (max-width: 800px) {

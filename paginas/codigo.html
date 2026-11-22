@@ -41,7 +41,7 @@
         <section>
 			<div class="container">
 				<h1>Código</h1>
-				<p class="introducao">O código roda no Arduino Uno: lê o LDR, troca de faixa sozinho, calcula o valor em lux e mostra no display. Ao ligar, o display toca uma animação de abertura.</p>
+				<p class="introducao">O código roda no Arduino Uno: lê o LDR, troca de faixa sozinho, calcula o valor em lux e mostra no display.</p>
 				<p><a class="botao" href="../codigo/luxif/luxif.ino" download>Baixar o código</a></p>
 			</div>
 		</section>
@@ -315,11 +315,11 @@ void loop() {
 		<section id="versao-wifi">
 			<div class="container">
 				<h2>Extensão opcional: versão com Wi-Fi (ESP32)</h2>
-				<p>Esta parte foi acrescentada por causa de um projeto de extensão e não é necessária para o luxímetro. Para usar a página <a href="ao-vivo.html">Internet (ESP32)</a>, existe uma versão do código para o ESP32. Ela segue a mesma lógica, com estas diferenças:</p>
+				<p>Esta parte não é necessária para o luxímetro. Para usar a página <a href="ao-vivo.html">Internet (ESP32)</a>, existe uma versão do código para o ESP32. Ela segue a mesma lógica, com estas diferenças:</p>
 				<ul>
 					<li>usa os pinos do ESP32 (veja a tabela em <a href="componentes.html#versao-wifi">Componentes</a>);</li>
 					<li>a leitura vai de 0 a 4095, então os limites passam a ser 400 e 3700; o rodapé do display mostra o endereço IP em vez das faixas;</li>
-					<li>conecta-se ao Wi-Fi e publica cada leitura, no formato <code>{"lux":523.4,"percentage":100,"faixa":1}</code>, num servidor MQTT público, de onde o site a recebe pela internet;</li>
+					<li>conecta-se ao Wi-Fi e publica cada leitura, no formato <code>{"lux":523.4,"percentage":100.0,"faixa":1}</code>, num servidor MQTT público, de onde o site a recebe pela internet;</li>
 					<li>também aceita conexões direto pela rede local (WebSocket em <code>ws://IP/ws</code>, porta 80, o mesmo endereço do servidor ESP-IDF do Vinícius), para usar sem internet. O site envia a mensagem <code>conectado</code> ao abrir a conexão, como o servidor dele espera.</li>
 				</ul>
 				<p>Para gravar, instale a placa <strong>esp32</strong> (da Espressif Systems) no Gerenciador de Placas e, no Gerenciador de Bibliotecas, as bibliotecas <strong>PubSubClient</strong>, de Nick O'Leary (MQTT), e <strong>WebSockets</strong>, de Markus Sattler (rede local), além das duas do display. Antes de carregar, troque <code>nome-da-rede</code> e <code>senha-da-rede</code> pelos dados do seu Wi-Fi.</p>

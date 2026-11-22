@@ -41,7 +41,7 @@
         <section>
 			<div class="container">
 				<h1>Monte o seu LUXIF</h1>
-				<p class="introducao">Um guia passo a passo para montar, gravar e testar o seu luxímetro, explicando o porquê de cada ligação. Ao final, você terá um instrumento funcionando e terá praticado conceitos de Física e Eletrônica. O foco é um luxímetro simples, com Arduino e bateria, que serve de base para você melhorar; ele não é um instrumento de precisão. A versão com Wi-Fi (ESP32) é uma extensão opcional, no final da página.</p>
+				<p class="introducao">Um guia passo a passo para montar, gravar e testar o seu luxímetro, com o motivo de cada ligação. No fim você terá um instrumento funcionando e terá praticado Física e Eletrônica. O foco é um luxímetro simples, com Arduino e bateria, que serve de base para você melhorar; ele não é um instrumento de precisão. A versão com Wi-Fi (ESP32) é uma extensão opcional, no final da página.</p>
 				<p>
 					<a class="botao" href="#passos">Ir para a montagem</a>
 					<a class="botao secundario" href="componentes.html#materiais">Lista de materiais</a>
@@ -110,7 +110,7 @@
 
 				<h3>Passo 4 — O display OLED</h3>
 				<p><strong>O que fazer:</strong> ligue o GND do display ao GND do Arduino, o VCC ao 5V, o SDA ao A4 e o SCL ao A5. No Arduino Uno R3, os pinos SDA e SCL, perto do AREF, são ligados internamente a A4 e A5: pode usar qualquer um dos dois pares.</p>
-				<p><strong>Por quê:</strong> o display conversa com o Arduino pelo barramento I²C, que usa só dois fios: SDA (dados) e SCL (relógio). No Arduino Uno, eles ficam em A4 e A5 (e repetidos nos pinos SDA e SCL).</p>
+				<p><strong>Por quê:</strong> o display conversa com o Arduino pelo barramento I²C, que usa só dois fios: SDA (dados) e SCL (relógio). No Uno, essas duas linhas são A4 e A5.</p>
 
 				<h3>Passo 5 — Gravar o código</h3>
 				<ol>
@@ -130,11 +130,11 @@
 				<p><strong>Para pensar:</strong> por que a faixa muda quando a leitura passa de 920 ou fica abaixo de 100? Relacione esses números com as tensões de 4,5 V e 0,5 V e com a forma das curvas da <a href="funcionamento.html#circuito">Figura 2</a>.</p>
 
 				<h3>Passo 7 — Alimentação por bateria</h3>
-				<p><strong>O que fazer:</strong> ligue o polo positivo da bateria de 9 V à chave gangorra e a saída da chave ao polo positivo do conector de energia do Arduino (use um cabo com plugue P4). Ligue o polo negativo ao negativo do conector. Antes de ligar, confira com um multímetro qual fio do cabo é o positivo: o pino central do plugue deve receber o positivo da bateria.</p>
+				<p><strong>O que fazer:</strong> ligue o polo positivo da bateria de 9 V à chave gangorra e a saída da chave ao polo positivo do conector de energia do Arduino (use um cabo com plugue P4). Ligue o polo negativo ao negativo do conector.</p>
 				<p><strong>Por quê:</strong> o regulador interno do Arduino aceita de 7 a 12 V no conector de energia e fornece os 5 V que o circuito usa. A chave fica no fio positivo, entre a bateria e o conector, para desligar todo o circuito de uma vez. Depois de testar tudo com a bateria, solde os componentes na placa perfurada e teste de novo.</p>
 
 				<div class="aviso">
-					<strong>Atenção:</strong> confira a polaridade da bateria antes de ligar o conector. O positivo da bateria vai à chave e ao polo positivo do conector, e o negativo ao polo negativo.
+					<strong>Atenção:</strong> o positivo da bateria vai à chave e ao pino central do plugue, mas a cor dos fios do cabo P4 varia de um cabo para outro. Confirme com um multímetro antes de ligar.
 				</div>
 			</div>
 		</section>
@@ -152,7 +152,7 @@
 				</details>
 				<details>
 					<summary>O valor em lux é altíssimo e o ADC fica perto de 0</summary>
-					<p>A leitura está perto de zero. Confira se o ponto do divisor não está em curto com o GND e se os resistores estão nos pinos D2 a D5 certos.</p>
+					<p>O ADC perto de zero indica que o ponto do divisor está quase no GND. Confira se ele não está em curto com o GND e se os resistores estão nos pinos D2 a D5 certos.</p>
 				</details>
 				<details>
 					<summary>Nenhum LED azul acende</summary>
@@ -196,7 +196,7 @@
 		<section id="esp32">
 			<div class="container">
 				<h2>Extensão opcional: versão com Wi-Fi (ESP32)</h2>
-				<p>Esta parte foi acrescentada por causa de um projeto de extensão. Só faça depois que o luxímetro com Arduino estiver funcionando.</p>
+				<p>Esta parte é opcional. Só faça depois que o luxímetro com Arduino estiver funcionando.</p>
 				<ol>
 					<li>Faça as mesmas ligações dos passos 1 a 4, usando os pinos do ESP32 da tabela em <a href="componentes.html#versao-wifi">Componentes</a>. O display usa 3V3 em vez de 5V.</li>
 					<li>Na Arduino IDE, instale a placa <strong>esp32</strong> e as bibliotecas <strong>PubSubClient</strong> e <strong>WebSockets</strong>, além das do display.</li>

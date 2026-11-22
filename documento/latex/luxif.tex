@@ -177,7 +177,7 @@ Como dois LDRs do mesmo modelo podem ter curvas diferentes, $A$ e $\gamma$ podem
 
 \subsection*{Extensão com ESP32}
 
-A versão com ESP32 foi acrescentada por causa de um projeto de extensão. O circuito de medição é o mesmo, com os pinos GPIO 25, 26, 27 e 14 para os resistores de referência, GPIO 16 a 19 para os LEDs e GPIO 34 para a leitura. O conversor analógico-digital do ESP32 tem 12 bits, e a leitura $N$ vai de 0 a 4095, com os limites de troca de faixa em 400 e 3700. As leituras são enviadas como texto JSON, no formato \texttt{\{"lux":523.4,"percentage":100.0,"faixa":1\}}, por dois caminhos: pela internet, com o protocolo MQTT (OASIS, 2014), em que o ESP32 publica as medições em um canal de um servidor e a página web assina esse canal; e pela rede local, com um servidor WebSocket (FETTE; MELNIKOV, 2011) acessado em \texttt{ws://IP/ws}, em que o navegador se conecta diretamente ao ESP32. O servidor WebSocket foi desenvolvido em ESP-IDF e usa o mesmo formato de mensagem, de modo que a mesma página exibe os dados vindos de qualquer um dos firmwares.
+Na versão com ESP32, o circuito de medição é o mesmo, com os pinos GPIO 25, 26, 27 e 14 para os resistores de referência, GPIO 16 a 19 para os LEDs e GPIO 34 para a leitura. O conversor analógico-digital do ESP32 tem 12 bits (ESPRESSIF SYSTEMS, [s.d.]), e a leitura $N$ vai de 0 a 4095, com os limites de troca de faixa em 400 e 3700. As leituras são enviadas como texto JSON, no formato \texttt{\{"lux":523.4,"percentage":100.0,"faixa":1\}}, por dois caminhos: pela internet, com o protocolo MQTT (OASIS, 2014), em que o ESP32 publica as medições em um canal de um servidor e a página web assina esse canal; e pela rede local, com um servidor WebSocket (FETTE; MELNIKOV, 2011) acessado em \texttt{ws://IP/ws}, em que o navegador se conecta diretamente ao ESP32. O servidor WebSocket foi desenvolvido em ESP-IDF e usa o mesmo formato de mensagem, de modo que a mesma página exibe os dados vindos de qualquer um dos firmwares.
 
 \section*{RESULTADOS E DISCUSSÃO}
 
@@ -228,7 +228,7 @@ Cada uma dessas limitações é também um ponto de partida para melhorias: troc
 
 O presente trabalho apresentou um luxímetro simples e replicável, baseado em um LDR, em quatro resistores de referência e em um Arduino Uno, com a finalidade principal de mostrar como se monta um instrumento desse tipo com microcontrolador e bateria. A análise teórica do divisor de tensão mostrou que a seleção automática entre os resistores mantém a leitura sempre na região de maior sensibilidade, ampliando a faixa dinâmica em comparação com um resistor fixo, em cerca de 0,003 a 11\,000 lux pela estimativa teórica.
 
-Os LEDs indicadores, ligados a saídas próprias e com um resistor único, não interferem na medição, e a alimentação por bateria de 9~V com chave torna o instrumento portátil. As limitações descritas, em especial a falta de calibração, impedem tratá-lo como instrumento de precisão, mas deixam claro por onde melhorá-lo. A versão opcional com ESP32, acrescentada por causa de um projeto de extensão, transmite as leituras por Wi-Fi, pela internet (MQTT) ou pela rede local (WebSocket), para uma página web que as exibe em tempo real.
+Os LEDs indicadores, ligados a saídas próprias e com um resistor único, não interferem na medição, e a alimentação por bateria de 9~V com chave torna o instrumento portátil. As limitações descritas, em especial a falta de calibração, impedem tratá-lo como instrumento de precisão, mas deixam claro por onde melhorá-lo. A versão opcional com ESP32 transmite as leituras por Wi-Fi, pela internet (MQTT) ou pela rede local (WebSocket), para uma página web que as exibe em tempo real.
 
 \section*{CONTRIBUIÇÕES DOS AUTORES}
 
@@ -246,6 +246,9 @@ ARDUINO. \textbf{Arduino Uno Rev3}: documentação técnica. [S.l.]: Arduino, [s
 
 \vspace{6pt}
 HALLIDAY, David; RESNICK, Robert; WALKER, Jearl. \textbf{Fundamentos de Física}: Óptica e Física Moderna. 10. ed. Rio de Janeiro: LTC, 2016.
+
+\vspace{6pt}
+ESPRESSIF SYSTEMS. \textbf{ESP32 Series Datasheet}. Xangai: Espressif Systems, [s.d.]. Disponível em: \url{https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf}.
 
 \vspace{6pt}
 FETTE, Ian; MELNIKOV, Alexey. \textbf{RFC 6455}: The WebSocket Protocol. Internet Engineering Task Force, 2011. Disponível em: \url{https://www.rfc-editor.org/rfc/rfc6455}.

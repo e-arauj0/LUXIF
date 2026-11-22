@@ -142,8 +142,8 @@
 						</table>
 					</div>
 					<p>Cada leitura é um texto no formato JSON:</p>
-					<pre><code>{"lux":523.4,"faixa":1}</code></pre>
-					<p><code>lux</code> é a iluminância medida e <code>faixa</code> é o resistor em uso: 0 = 1 kΩ, 1 = 10 kΩ, 2 = 100 kΩ e 3 = 470 kΩ.</p>
+					<pre><code>{"lux":523.4,"percentage":100.0,"faixa":1}</code></pre>
+					<p><code>lux</code> é a iluminância medida; <code>percentage</code> é essa iluminância em relação a 200 lux, limitada a 100, no mesmo formato do servidor do Vinícius; e <code>faixa</code> é o resistor em uso: 0 = 1 kΩ, 1 = 10 kΩ, 2 = 100 kΩ e 3 = 470 kΩ.</p>
 					<p>O servidor é público: qualquer pessoa que conheça o nome do canal pode ver as leituras. Para um projeto didático isso não é um problema, mas não use o canal para dados privados.</p>
 				</div>
 			</div>

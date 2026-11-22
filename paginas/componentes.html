@@ -41,7 +41,7 @@
         <section>
 			<div class="container">
 				<h1>Componentes</h1>
-				<p class="introducao">O que você precisa para montar o luxímetro: lista de materiais, esquema elétrico e ligações pino a pino. Tudo é barato e fácil de achar. A versão com ESP32 é opcional e fica no final da página.</p>
+				<p class="introducao">O que você precisa para montar o luxímetro: lista de materiais, esquema elétrico e ligações pino a pino. A versão com ESP32 é opcional e fica no final da página.</p>
 			</div>
 		</section>
 
@@ -118,7 +118,7 @@
 				<h2>Como montar</h2>
 				<p>O passo a passo completo, com o motivo de cada ligação, os testes de cada etapa e as soluções para os problemas mais comuns, está na página <a href="montagem.html">Monte o seu</a>.</p>
 				<div class="aviso">
-					<strong>Cuidado:</strong> nunca ligue um LED direto ao pino, sem resistor: ele puxa corrente demais e pode queimar, junto com a saída do Arduino. Aqui os quatro LEDs dividem um único resistor de 1 kΩ, o que só funciona porque o programa acende um LED por vez. Confira a polaridade de cada LED: o ânodo (perna maior) fica do lado do pino.
+					<strong>Cuidado:</strong> nunca ligue um LED direto ao pino, sem resistor, porque ele puxa corrente demais e pode queimar, junto com a saída do Arduino. Aqui os quatro LEDs dividem um único resistor de 1 kΩ, o que só funciona porque o programa acende um LED por vez. Confira a polaridade de cada LED: o ânodo (perna maior) fica do lado do pino.
 				</div>
 			</div>
 		</section>
@@ -126,7 +126,7 @@
 		<section id="versao-wifi">
 			<div class="container">
 				<h2>Extensão opcional: versão com Wi-Fi (ESP32)</h2>
-				<p>Esta parte é opcional e foi acrescentada por causa de um projeto de extensão: o luxímetro funciona sem ela. Para enviar as leituras pela internet, na página <a href="ao-vivo.html">Internet (ESP32)</a>, troque o Arduino Uno por um ESP32. O circuito é o mesmo; mudam só os pinos:</p>
+				<p>Esta parte é opcional: o luxímetro funciona sem ela. Para enviar as leituras pela internet, na página <a href="ao-vivo.html">Internet (ESP32)</a>, troque o Arduino Uno por um ESP32. O circuito é o mesmo; mudam só os pinos:</p>
 				<div class="tabela-rolagem">
 					<table>
 						<thead>
