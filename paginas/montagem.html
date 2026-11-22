@@ -103,9 +103,9 @@
 				<p><strong>O que fazer:</strong> ligue o LDR entre o ponto do divisor e o GND. Ligue também o ponto do divisor ao pino A0. O LDR não tem polaridade, então qualquer terminal serve.</p>
 				<p><strong>Por quê:</strong> a tensão no ponto do divisor é <em>V = 5 V × R<sub>LDR</sub> ÷ (R<sub>n</sub> + R<sub>LDR</sub>)</em>. Com muita luz, R<sub>LDR</sub> cai e a tensão cai; no escuro, R<sub>LDR</sub> sobe e a tensão sobe. O Arduino lê essa tensão em A0. A explicação completa está em <a href="funcionamento.html#circuito">Como funciona</a>.</p>
 
-				<h3>Passo 3 — Os LEDs azuis (D6 a D9)</h3>
-				<p><strong>O que fazer:</strong> ligue cada LED azul a um pino, do D6 ao D9, com um resistor de 1 kΩ em série, e leve a outra ponta ao GND. A perna maior do LED (o ânodo) fica do lado do pino.</p>
-				<p><strong>Por quê:</strong> o resistor limita a corrente do LED. Sem ele, o LED puxaria corrente demais e poderia queimar, junto com o pino. Os LEDs ficam em pinos próprios, fora do divisor, para que a queda de tensão deles não atrapalhe a medição.</p>
+				<h3>Passo 3 — Os LEDs azuis (D8 a D11)</h3>
+				<p><strong>O que fazer:</strong> ligue o ânodo (a perna maior) de cada LED azul a um pino, do D8 ao D11. Una os quatro catodos (as pernas menores) num mesmo ponto e ligue esse ponto ao GND por um único resistor de 1 kΩ.</p>
+				<p><strong>Por quê:</strong> o resistor limita a corrente do LED. Sem ele, o LED puxaria corrente demais e poderia queimar, junto com o pino. Com um LED azul (cerca de 3 V de queda) e 5 V, a corrente fica perto de (5 − 3) ÷ 1000 = 2 mA, suficiente para acender. Um único resistor basta porque o programa acende só um LED por vez. Os LEDs ficam em pinos próprios, fora do divisor, para que a queda de tensão deles não atrapalhe a medição.</p>
 
 				<h3>Passo 4 — O display OLED</h3>
 				<p><strong>O que fazer:</strong> ligue o GND do display ao GND do Arduino, o VCC ao 5V, o SDA ao A4 e o SCL ao A5.</p>
@@ -128,8 +128,8 @@
 				<p><strong>Para pensar:</strong> por que a faixa muda quando a leitura passa de 920 ou fica abaixo de 100? Relacione esses números com as tensões de 4,5 V e 0,5 V e com a forma das curvas da <a href="funcionamento.html#circuito">Figura 2</a>.</p>
 
 				<h3>Passo 7 — Alimentação por bateria</h3>
-				<p><strong>O que fazer:</strong> ligue o polo positivo da bateria de 9 V à chave gangorra e a saída da chave ao polo positivo do conector de energia do Arduino (use um cabo com plugue P4). Ligue o polo negativo ao negativo do conector. Em paralelo com a saída da chave, ligue o LED vermelho com um resistor de 1 kΩ até o GND, para indicar que o circuito está ligado.</p>
-				<p><strong>Por quê:</strong> o regulador interno do Arduino aceita de 7 a 12 V no conector de energia e fornece os 5 V que o circuito usa. O LED vermelho fica em paralelo com a alimentação, e não em série, para que ele não limite a corrente do circuito. Depois de testar tudo com a bateria, solde os componentes na placa perfurada e teste de novo.</p>
+				<p><strong>O que fazer:</strong> ligue o polo positivo da bateria de 9 V à chave gangorra e a saída da chave ao polo positivo do conector de energia do Arduino (use um cabo com plugue P4). Ligue o polo negativo ao negativo do conector. Antes de ligar, confira com um multímetro qual fio do cabo é o positivo: o pino central do plugue deve receber o positivo da bateria.</p>
+				<p><strong>Por quê:</strong> o regulador interno do Arduino aceita de 7 a 12 V no conector de energia e fornece os 5 V que o circuito usa. A chave fica no fio positivo, entre a bateria e o conector, para desligar todo o circuito de uma vez. Depois de testar tudo com a bateria, solde os componentes na placa perfurada e teste de novo.</p>
 
 				<div class="aviso">
 					<strong>Atenção:</strong> confira a polaridade da bateria antes de ligar o conector. O positivo da bateria vai à chave e ao polo positivo do conector, e o negativo ao polo negativo.
@@ -154,7 +154,7 @@
 				</details>
 				<details>
 					<summary>Nenhum LED azul acende</summary>
-					<p>Verifique a polaridade (a perna maior do LED vai do lado do pino) e se o resistor de 1 kΩ está em série com cada LED. Depois confira se o outro terminal está no GND.</p>
+					<p>Verifique a polaridade (a perna maior do LED vai do lado do pino) e se os quatro catodos estão unidos e ligados ao GND pelo resistor de 1 kΩ. Sem esse resistor no caminho para o GND, nenhum LED acende.</p>
 				</details>
 				<details>
 					<summary>O valor oscila muito</summary>
@@ -212,6 +212,7 @@
 					<li>Por que um LDR sozinho, com um único resistor fixo, mede mal uma faixa grande de luz?</li>
 					<li>O que aconteceria se dois pinos de D2 a D5 ficassem em nível alto ao mesmo tempo?</li>
 					<li>Por que os LEDs azuis ficam fora do divisor de tensão?</li>
+					<li>Por que um único resistor basta para os quatro LEDs? O que mudaria se o programa acendesse dois ao mesmo tempo?</li>
 					<li>Por que usar 10 leituras e tirar a média em vez de uma só?</li>
 					<li>No gráfico de resistência do LDR em escala logarítmica, por que a curva é uma reta?</li>
 				</ul>

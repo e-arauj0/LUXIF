@@ -61,14 +61,12 @@
 							<tr><td>Resistor de 100 kΩ</td><td>1</td><td>Referência da terceira faixa</td><td>—</td></tr>
 							<tr><td>Resistor de 470 kΩ</td><td>1</td><td>Referência da faixa de pouca luz</td><td>—</td></tr>
 							<tr><td>LED azul</td><td>4</td><td>Indicar visualmente qual faixa está sendo utilizada</td><td>Pode ser substituído por qualquer outra cor</td></tr>
-							<tr><td>Resistor de 1 kΩ</td><td>4</td><td>Limitar a corrente de cada LED azul</td><td>—</td></tr>
+							<tr><td>Resistor de 1 kΩ</td><td>1</td><td>Limitar a corrente do LED aceso</td><td>Um só serve aos quatro LEDs, pois só um fica aceso por vez</td></tr>
 							<tr><td>Display OLED 0,96" (SSD1306, I²C)</td><td>1</td><td>Mostrar a leitura em lux e a faixa em uso</td><td>—</td></tr>
 							<tr><td>Bateria 9 V</td><td>1</td><td>Alimentar o circuito quando não estiver conectado ao computador</td><td>—</td></tr>
 							<tr><td>Holder de bateria 9 V</td><td>1</td><td>Segurar a bateria</td><td>—</td></tr>
 							<tr><td>Cabo com plugue P4 para bateria 9 V</td><td>1</td><td>Ligar a bateria ao conector de energia do Arduino</td><td>—</td></tr>
 							<tr><td>Chave gangorra</td><td>1</td><td>Ligar e desligar o circuito</td><td>—</td></tr>
-							<tr><td>LED vermelho</td><td>1</td><td>Indicar que o circuito está ligado</td><td>Pode ser substituído por qualquer outra cor</td></tr>
-							<tr><td>Resistor de 1 kΩ</td><td>1</td><td>Limitar a corrente do LED vermelho</td><td>—</td></tr>
 							<tr><td>Placa perfurada de fibra de vidro</td><td>1</td><td>Base para soldar os componentes</td><td>Pode ser substituída por uma protoboard</td></tr>
 							<tr><td>Jumpers macho-macho</td><td>Vários</td><td>Realizar as ligações</td><td>A quantidade depende da disposição na placa</td></tr>
 						</tbody>
@@ -81,8 +79,8 @@
 			<div class="container">
 				<h2>Esquema elétrico</h2>
 				<figure>
-					<img src="../imagens/esquema-eletrico.png" alt="Esquema elétrico do LUXIF: as saídas D2 a D5 do Arduino Uno ligam, cada uma, um resistor de referência (1 kΩ, 10 kΩ, 100 kΩ e 470 kΩ) ao ponto comum, que vai à entrada A0 e ao LDR; as saídas D6 a D9 ligam os LEDs azuis, cada um em série com um resistor de 1 kΩ até o GND; a bateria de 9 V passa pela chave e chega ao conector de energia, com o LED vermelho e seu resistor em paralelo; o display OLED usa 5V, GND, A4 (SDA) e A5 (SCL)." width="1271" height="1043">
-					<figcaption>Os LEDs azuis ficam em saídas próprias (D6 a D9), fora do divisor de tensão, para não interferir na medição. O LED vermelho fica em paralelo com a alimentação, com seu próprio resistor. O display usa 5V e GND para a alimentação, A4 para o SDA e A5 para o SCL.</figcaption>
+					<img src="../imagens/esquema-eletrico.svg" alt="Esquema elétrico do LUXIF: as saídas D2 a D5 do Arduino Uno ligam, cada uma, um resistor de referência (1 kΩ, 10 kΩ, 100 kΩ e 470 kΩ) ao ponto do divisor, que vai à entrada A0 e ao LDR; as saídas D8 a D11 ligam os LEDs azuis, que têm os catodos unidos e compartilham um único resistor de 1 kΩ até o GND; a bateria de 9 V passa pela chave e chega ao conector de energia; o display OLED usa 5V, GND, SDA (A4) e SCL (A5)." width="1000" height="740">
+					<figcaption>Os LEDs azuis ficam em saídas próprias (D8 a D11), fora do divisor de tensão, para não interferir na medição. Eles têm os catodos unidos e compartilham um único resistor de 1 kΩ, porque só um LED fica aceso por vez. O display usa 5V e GND para a alimentação, A4 para o SDA e A5 para o SCL.</figcaption>
 				</figure>
 			</div>
 		</section>
@@ -96,16 +94,16 @@
 							<tr><th>De</th><th>Para</th></tr>
 						</thead>
 						<tbody>
-							<tr><td>Bateria (+)</td><td>Chave gangorra → polo positivo do conector de energia do Arduino</td></tr>
+							<tr><td>Bateria (+)</td><td>Chave gangorra → polo positivo (pino central) do conector de energia do Arduino</td></tr>
 							<tr><td>Bateria (−)</td><td>Polo negativo do conector de energia do Arduino (ligado ao GND)</td></tr>
-							<tr><td>Saída da chave</td><td>LED vermelho → resistor de 1 kΩ → GND</td></tr>
 							<tr><td>D2</td><td>Resistor de 1 kΩ → ponto do divisor</td></tr>
 							<tr><td>D3</td><td>Resistor de 10 kΩ → ponto do divisor</td></tr>
 							<tr><td>D4</td><td>Resistor de 100 kΩ → ponto do divisor</td></tr>
 							<tr><td>D5</td><td>Resistor de 470 kΩ → ponto do divisor</td></tr>
 							<tr><td>Ponto do divisor</td><td>A0 e um terminal do LDR</td></tr>
 							<tr><td>Outro terminal do LDR</td><td>GND</td></tr>
-							<tr><td>D6, D7, D8 e D9</td><td>LED azul → resistor de 1 kΩ → GND (um conjunto por pino)</td></tr>
+							<tr><td>D8, D9, D10 e D11</td><td>Ânodo (perna maior) de um LED azul cada; os quatro catodos (perna menor) se unem num ponto comum</td></tr>
+							<tr><td>Ponto comum dos catodos</td><td>Resistor de 1 kΩ → GND</td></tr>
 							<tr><td>Display OLED SDA / SCL</td><td>A4 / A5</td></tr>
 							<tr><td>Display OLED VCC / GND</td><td>5V / GND do Arduino</td></tr>
 						</tbody>
@@ -119,7 +117,7 @@
 				<h2>Como montar</h2>
 				<p>O passo a passo completo, com o motivo de cada ligação, os testes de cada etapa e as soluções para os problemas mais comuns, está na página <a href="montagem.html">Monte o seu</a>.</p>
 				<div class="aviso">
-					<strong>Cuidado:</strong> cada LED precisa do seu resistor. Ligado direto no pino, o LED puxa corrente demais e pode queimar, junto com a saída do Arduino.
+					<strong>Cuidado:</strong> nunca ligue um LED direto ao pino, sem resistor: ele puxa corrente demais e pode queimar, junto com a saída do Arduino. Aqui os quatro LEDs dividem um único resistor de 1 kΩ, o que só funciona porque o programa acende um LED por vez. Confira a polaridade de cada LED: o ânodo (perna maior) fica do lado do pino.
 				</div>
 			</div>
 		</section>
@@ -135,7 +133,7 @@
 						</thead>
 						<tbody>
 							<tr><td>Resistores de 1 kΩ, 10 kΩ, 100 kΩ e 470 kΩ</td><td>D2, D3, D4, D5</td><td>GPIO 25, 26, 27, 14</td></tr>
-							<tr><td>LEDs azuis</td><td>D6, D7, D8, D9</td><td>GPIO 16, 17, 18, 19</td></tr>
+							<tr><td>LEDs azuis</td><td>D8, D9, D10, D11</td><td>GPIO 16, 17, 18, 19</td></tr>
 							<tr><td>Ponto do divisor</td><td>A0</td><td>GPIO 34</td></tr>
 							<tr><td>Display OLED SDA / SCL</td><td>A4 / A5</td><td>GPIO 21 / GPIO 22</td></tr>
 							<tr><td>Display OLED VCC</td><td>5V</td><td>3V3</td></tr>
@@ -143,7 +141,7 @@
 					</table>
 				</div>
 				<p>No ESP32, o ponto do divisor precisa ficar num pino entre o GPIO 32 e o 39: os outros pinos analógicos deixam de funcionar quando o Wi-Fi está ligado.</p>
-				<p>Como o ESP32 trabalha com 3,3 V, os LEDs azuis brilham menos do que no Arduino. Se ficarem fracos, troque os resistores deles por valores menores (por exemplo, 330 Ω).</p>
+				<p>Como o ESP32 trabalha com 3,3 V, os LEDs azuis (que pedem cerca de 3 V para acender) brilham muito pouco, e trocar o resistor por um menor não resolve. Se ficarem fracos, use LEDs de outra cor, como vermelho, verde ou amarelo, que acendem com cerca de 2 V. Os valores de tensão são típicos e variam de LED para LED.</p>
 			</div>
 		</section>
     </main>
