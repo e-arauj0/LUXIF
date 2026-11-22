@@ -41,7 +41,7 @@
         <section>
 			<div class="container">
 				<h1>Código</h1>
-				<p class="introducao">O código roda no Arduino Uno: lê o LDR, troca de faixa sozinho, calcula o valor em lux e mostra no display.</p>
+				<p class="introducao">O código roda no Arduino Uno: lê o LDR, troca de faixa sozinho, calcula o valor em lux e mostra no display. Ao ligar, o display toca uma animação de abertura.</p>
 				<p><a class="botao" href="../codigo/luxif/luxif.ino" download>Baixar o código</a></p>
 			</div>
 		</section>
@@ -54,7 +54,7 @@
 						<li>Instale a <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">Arduino IDE</a>.</li>
 						<li>Abra o arquivo <code>luxif.ino</code> e escolha a placa <strong>Arduino Uno</strong> e a porta.</li>
 						<li>Clique em Carregar.</li>
-						<li>O valor em lux aparece no display. Ele também aparece no Monitor Serial, em 9600 baud.</li>
+						<li>Ao ligar, toca a animação de abertura (cerca de 2 segundos) e depois o valor em lux aparece no display. Ele também aparece no Monitor Serial, em 9600 baud.</li>
 					</ol>
 				</div>
 				<div>
@@ -64,6 +64,7 @@
 						<li><strong>Adafruit GFX</strong>: desenha textos e linhas no display.</li>
 					</ul>
 					<p>Instale as duas pelo Gerenciador de Bibliotecas da Arduino IDE. A biblioteca <strong>Wire</strong>, usada na comunicação com o display, já vem com a IDE.</p>
+					<p>Os 10 quadros da animação ocupam cerca de 10 KB dos 32 KB de memória de programa do Arduino Uno. Por isso o código completo abaixo mostra só o começo deles; os bytes estão no arquivo para baixar.</p>
 				</div>
 			</div>
 		</section>
@@ -77,12 +78,13 @@
 							<tr><th>Função</th><th>O que faz</th></tr>
 						</thead>
 						<tbody>
-							<tr><td><code>setup()</code></td><td>Roda uma vez quando o Arduino liga: prepara os LEDs, escolhe a primeira faixa e liga o I2C (<code>Wire.begin()</code>) e o display; se o display não responder, avisa no Monitor Serial.</td></tr>
+							<tr><td><code>setup()</code></td><td>Roda uma vez quando o Arduino liga: prepara os LEDs, escolhe a primeira faixa, liga o I²C (<code>Wire.begin()</code>) e o display e toca a animação de abertura. Se o display não responder, avisa no Monitor Serial ("SSD1306 allocation failed") e para.</td></tr>
 							<tr><td><code>loop()</code></td><td>Roda sem parar: lê o sensor, troca de faixa se precisar e, se a leitura estiver boa, calcula e mostra o lux.</td></tr>
+							<tr><td><code>rodarAnimacaoBoot()</code></td><td>Mostra, um por vez, os 10 quadros da animação de abertura, que ficam guardados na memória de programa (<code>PROGMEM</code>). Roda uma única vez, no <code>setup()</code>.</td></tr>
 							<tr><td><code>selecionarFaixa()</code></td><td>Liga o pino de uma faixa e o seu LED, e desliga os outros.</td></tr>
 							<tr><td><code>lerMedia()</code></td><td>Lê o pino A0 dez vezes e devolve a média, para diminuir o ruído.</td></tr>
 							<tr><td><code>calcularLux()</code></td><td>Calcula a resistência do LDR e a converte em lux pela curva do sensor.</td></tr>
-							<tr><td><code>atualizarOLED()</code></td><td>Escreve no display o valor em lux, a faixa em uso, a leitura bruta (ADC) e, no rodapé, as quatro faixas com a ativa entre colchetes.</td></tr>
+							<tr><td><code>atualizarOLED()</code></td><td>Escreve no display o valor em lux, a faixa em uso, a leitura bruta (ADC) e, no rodapé, as quatro faixas com a ativa entre colchetes. Se a leitura passar de 920 na faixa de 470 kΩ, não há resistor maior para tentar, e o display mostra "Excedido" no lugar do valor.</td></tr>
 						</tbody>
 					</table>
 				</div>
@@ -96,22 +98,38 @@
 		<section id="codigo-completo">
 			<div class="container">
 				<h2>Código completo</h2>
-				<pre><code>#include &lt;Wire.h&gt;
+				<pre><code>// baixar bibliotecas Adafruit SSD1306
+// Adafruit GFX
+
+#include &lt;Wire.h&gt;
 #include &lt;Adafruit_GFX.h&gt;
 #include &lt;Adafruit_SSD1306.h&gt;
 
-// Configuração da OLED
-#define LARGURA_OLED 128
-#define ALTURA_OLED 64
-#define OLED_RESET -1
-#define OLED_ENDERECO 0x3C
+#define SCREEN_WIDTH  128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define SCREEN_ADDR   0x3C
 
-Adafruit_SSD1306 display(LARGURA_OLED, ALTURA_OLED, &amp;Wire, OLED_RESET);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &amp;Wire, OLED_RESET);
+
+// Animação de abertura: 10 quadros (frame0 a frame9), cada um com 1024 bytes
+// de um desenho de 128x64 pixels. Os bytes foram omitidos aqui; eles estão
+// no arquivo para baixar.
+const uint8_t PROGMEM frame0[1024] = { /* ... */ };
+const uint8_t PROGMEM frame1[1024] = { /* ... */ };
+/* ... frame2 a frame9 ... */
+
+// Array de ponteiros e número de frames visíveis para todo o código
+const uint8_t* const frames[] = {
+  frame0, frame1, frame2, frame3, frame4, 
+  frame5, frame6, frame7, frame8, frame9
+};
+const uint16_t numFrames = 10;
 
 // Pinos
 const int PINO_LDR = A0;
 const int PINOS_FAIXA[4] = {2, 3, 4, 5};    // Pinos dos resistores de referência
-const int PINOS_LED[4] = {6, 7, 8, 9};      // Pinos dos LEDs indicadores de faixa
+const int PINOS_LED[4] = {8, 9, 10, 11};      // Pinos dos LEDs indicadores de faixa
 
 // Faixas e Valores de Resistores
 const long RESISTORES[4] = {1000, 10000, 100000, 470000};
@@ -156,6 +174,17 @@ float calcularLux(int leitura) {
   return pow(A / resistenciaLdr, 1.0 / GAMA);
 }
 
+// FUNÇÃO DA ANIMAÇÃO DE BOOT (Roda apenas uma vez)
+void rodarAnimacaoBoot() {
+  for (uint16_t i = 0; i &lt; numFrames; i++) {
+    display.clearDisplay();
+    display.drawBitmap(0, 0, frames[i], 128, 64, SSD1306_WHITE);
+    display.display();
+    delay(143); // Velocidade de transição entre os quadros
+  }
+  delay(400); // Pausa final após a animação acabar
+}
+
 // Exibe os resultados na OLED
 void atualizarOLED(float lux, int leitura) {
   display.clearDisplay();
@@ -175,19 +204,16 @@ void atualizarOLED(float lux, int leitura) {
   display.print(F(" | ADC: "));
   display.print(leitura);
 
-  // Valor principal em Lux ou estado limite
+  // Valor principal em Lux ou estado de limite excedido
   display.setCursor(0, 28);
   if (leitura &gt; LIMITE_ALTO &amp;&amp; faixaAtual == 3) {
     display.setTextSize(2);
-    display.println(F("Mto Escuro"));
-  } else if (leitura &lt; LIMITE_BAIXO &amp;&amp; faixaAtual == 0) {
-    display.setTextSize(2);
-    display.println(F("Mto Claro"));
+    display.println(F("Excedido"));
   } else {
     display.setTextSize(3);
-    display.print(lux, lux &lt; 10 ? 1 : 0);
+    display.print(lux, lux &lt; 10.0 ? 3 : (lux &lt; 100.0 ? 2 : 0));
     display.setTextSize(1);
-    display.println(F(" lx"));
+    display.println(F(" Lux"));
   }
 
   // Rodapé com indicadores visuais de faixa ativa
@@ -210,8 +236,6 @@ void atualizarOLED(float lux, int leitura) {
 
 void setup() {
   Serial.begin(9600);
-  
-  // INICIALIZAÇÃO OBRIGATÓRIA DO I2C PARA O OLED LIGAR
   Wire.begin();
 
   for (int i = 0; i &lt; 4; i++) {
@@ -219,22 +243,18 @@ void setup() {
   }
   selecionarFaixa(faixaAtual);
 
-  // Inicializa o display OLED no endereço 0x3C
-  if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_ENDERECO)) {
-    Serial.println(F("Falha ao iniciar OLED. Verifique as conexões ou o endereço (0x3C / 0x3D)."));
-    while (true) {
-      delay(100);
-    }
+  // Inicializa o display OLED
+  if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDR)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    while (true);
   }
 
+  display.setRotation(0);
   display.clearDisplay();
-  display.setTextColor(SSD1306_WHITE);
-  display.setTextSize(1);
-  display.setCursor(0, 20);
-  display.println(F("Inicializando LUXIF..."));
   display.display();
 
-  delay(800);
+  // 👉 A ANIMAÇÃO É CHAMADA AQUI APENAS UMA VEZ NO INÍCIO
+  rodarAnimacaoBoot();
 }
 
 void loop() {
@@ -254,7 +274,7 @@ void loop() {
 
   float lux = calcularLux(leitura);
 
-  // Atualiza a tela OLED
+  // Atualiza a tela OLED com as leituras do luxímetro
   atualizarOLED(lux, leitura);
 
   // Monitor Serial

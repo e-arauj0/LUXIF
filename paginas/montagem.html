@@ -108,22 +108,23 @@
 				<p><strong>Por quê:</strong> o resistor limita a corrente do LED. Sem ele, o LED puxaria corrente demais e poderia queimar, junto com o pino. Com um LED azul (cerca de 3 V de queda) e 5 V, a corrente fica perto de (5 − 3) ÷ 1000 = 2 mA, suficiente para acender. Um único resistor basta porque o programa acende só um LED por vez. Os LEDs ficam em pinos próprios, fora do divisor, para que a queda de tensão deles não atrapalhe a medição.</p>
 
 				<h3>Passo 4 — O display OLED</h3>
-				<p><strong>O que fazer:</strong> ligue o GND do display ao GND do Arduino, o VCC ao 5V, o SDA ao A4 e o SCL ao A5.</p>
-				<p><strong>Por quê:</strong> o display conversa com o Arduino pelo barramento I²C, que usa só dois fios: SDA (dados) e SCL (relógio). No Arduino Uno, eles ficam em A4 e A5.</p>
+				<p><strong>O que fazer:</strong> ligue o GND do display ao GND do Arduino, o VCC ao 5V, o SDA ao A4 e o SCL ao A5. No Arduino Uno R3, os pinos SDA e SCL, perto do AREF, são ligados internamente a A4 e A5: pode usar qualquer um dos dois pares.</p>
+				<p><strong>Por quê:</strong> o display conversa com o Arduino pelo barramento I²C, que usa só dois fios: SDA (dados) e SCL (relógio). No Arduino Uno, eles ficam em A4 e A5 (e repetidos nos pinos SDA e SCL).</p>
 
 				<h3>Passo 5 — Gravar o código</h3>
 				<ol>
 					<li>Abra a Arduino IDE e instale as bibliotecas <strong>Adafruit SSD1306</strong> e <strong>Adafruit GFX</strong> pelo Gerenciador de Bibliotecas.</li>
 					<li>Abra o arquivo <code>luxif.ino</code> (baixe na página <a href="codigo.html">Código</a>).</li>
 					<li>Escolha a placa <strong>Arduino Uno</strong> e a porta serial, e clique em Carregar.</li>
+					<li>Ao ligar, o display toca uma animação de abertura de cerca de 2 segundos.</li>
 					<li>Abra o Monitor Serial a 9600 baud. A cada leitura aparecem a faixa, o valor lido (ADC) e o lux.</li>
 				</ol>
 
 				<h3>Passo 6 — Testar</h3>
 				<ol>
 					<li>Com o ambiente normal, o display deve mostrar um valor em lux e a faixa em uso, com o LED azul correspondente aceso.</li>
-					<li>Cubra o LDR com a mão. O valor cai, e o LED aceso pode mudar para uma faixa de resistor maior (como 100k ou 470k). No escuro total, o display mostra "Mto Escuro".</li>
-					<li>Aponte a lanterna do celular para o LDR. O valor sobe, e o LED muda para uma faixa de resistor menor. Na luz muito forte, o display mostra "Mto Claro".</li>
+					<li>Cubra o LDR com a mão. O valor cai, e o LED aceso pode mudar para uma faixa de resistor maior (como 100k ou 470k). No escuro total, na faixa de 470 kΩ, o display mostra "Excedido".</li>
+					<li>Aponte a lanterna do celular para o LDR. O valor sobe, e o LED muda para uma faixa de resistor menor.</li>
 				</ol>
 				<p><strong>Para pensar:</strong> por que a faixa muda quando a leitura passa de 920 ou fica abaixo de 100? Relacione esses números com as tensões de 4,5 V e 0,5 V e com a forma das curvas da <a href="funcionamento.html#circuito">Figura 2</a>.</p>
 
@@ -142,14 +143,14 @@
 				<h2>Se alguma coisa não funcionar</h2>
 				<details>
 					<summary>O display não acende</summary>
-					<p>Confira o GND e o 5V do display e se SDA e SCL não estão trocados (SDA no A4, SCL no A5). Abra o Monitor Serial: se aparecer "Falha ao iniciar OLED", o Arduino não achou o display. Alguns módulos usam o endereço 0x3D em vez de 0x3C; nesse caso, troque <code>OLED_ENDERECO</code> no código.</p>
+					<p>Confira o GND e o 5V do display e se SDA e SCL não estão trocados (SDA no A4, SCL no A5). Abra o Monitor Serial: se aparecer "SSD1306 allocation failed", o Arduino não achou o display. Alguns módulos usam o endereço 0x3D em vez de 0x3C; nesse caso, troque <code>SCREEN_ADDR</code> no código.</p>
 				</details>
 				<details>
-					<summary>O display mostra sempre "Mto Escuro"</summary>
+					<summary>O display mostra sempre "Excedido"</summary>
 					<p>A leitura está no máximo, o que acontece quando o LDR não está ligado ao ponto do divisor ou ao GND. Verifique o contato dos dois terminais do LDR.</p>
 				</details>
 				<details>
-					<summary>O display mostra sempre "Mto Claro"</summary>
+					<summary>O valor em lux é altíssimo e o ADC fica perto de 0</summary>
 					<p>A leitura está perto de zero. Confira se o ponto do divisor não está em curto com o GND e se os resistores estão nos pinos D2 a D5 certos.</p>
 				</details>
 				<details>

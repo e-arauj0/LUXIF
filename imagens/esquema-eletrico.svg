@@ -38,7 +38,8 @@
     <text x="420" y="106">GND</text><text x="470" y="106">VCC</text><text x="530" y="106">SDA</text><text x="580" y="106">SCL</text>
   </g>
   <g class="pino" text-anchor="middle">
-    <text x="420" y="172">GND</text><text x="470" y="172">5V</text><text x="530" y="172">A4</text><text x="580" y="172">A5</text>
+    <text x="420" y="172">GND</text><text x="470" y="172">5V</text><text x="530" y="172">SDA</text><text x="580" y="172">SCL</text>
+    <text class="peq" x="530" y="188">(A4)</text><text class="peq" x="580" y="188">(A5)</text>
   </g>
 
   <!-- ===== Lado direito: resistores de referência, ponto do divisor, LDR ===== -->
