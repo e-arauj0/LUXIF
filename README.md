@@ -34,4 +34,16 @@ luxif
 |- codigo/
 |   |- luxif/           # Código para o Arduino Uno (o luxímetro)
 |   |- luxif_wifi/      # Extensão com Wi-Fi, para o ESP32
+|- documento/           # Artigo sobre o projeto (PDF)
+|   |- latex/           # Código-fonte do artigo em LaTeX
 ```
+
+# Como gerar o artigo
+O artigo está em `documento/LUXIF.pdf`. Para gerá-lo de novo a partir do fonte, é preciso ter o LaTeX instalado (com os pacotes `pgfplots` e `babel` em português):
+
+```
+cd documento/latex
+latexmk -pdf luxif.tex
+```
+
+A figura do esquema elétrico (`documento/latex/figuras/esquema-eletrico.pdf`) vem do mesmo arquivo usado no site, `imagens/esquema-eletrico.svg`. Se você alterar o esquema, gere o PDF da figura de novo a partir do SVG.
