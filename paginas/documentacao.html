@@ -2,15 +2,17 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Documentação</title>
 
     <link rel="icon" href="../icones/icone.png" type="image/png">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&amp;family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+	<script src="../js/tema.js"></script>
 </head>
 <body>
     <header>
-        <div class="container">
+        <div class="painel">
             <a href="../index.html"><img class="logo" src="../imagens/logo.svg" alt="Logo LUXIF — página inicial"></a>
             <nav>
                 <ul>
@@ -19,20 +21,91 @@
                     <li><a href="componentes.html">Componentes</a></li>
                     <li><a href="montagem.html">Monte o seu</a></li>
                     <li><a href="codigo.html">Código</a></li>
-                    <li><a href="ao-vivo.html">Ao vivo</a></li>
                     <li><a href="documentacao.html" aria-current="page">Documentação</a></li>
+                    <li><a href="ao-vivo.html">Internet (ESP32)</a></li>
                     <li><a href="equipe.html">Nosso time</a></li>
                 </ul>
             </nav>
+			<div class="ferramentas">
+				<a class="indicador-luxif" href="ao-vivo.html" title="Leitura atual do LUXIF" hidden><span></span></a>
+				<div class="seletor-tema" role="group" aria-label="Tema do site">
+					<button type="button" data-escolha="claro" aria-pressed="false" aria-label="Tema claro" title="Tema claro"><img src="../icones/claro.svg" alt="" class="icone"></button>	
+					<button type="button" data-escolha="auto" aria-pressed="true" aria-label="Tema auto" title="Tema auto"><img src="../icones/auto.svg" alt="" class="icone"></button>
+					<button type="button" data-escolha="escuro" aria-pressed="false" aria-label="Tema escuro" title="Tema escuro"><img src="../icones/escuro.svg" alt="" class="icone"></button>				
+				</div>
+			</div>
         </div>
     </header>
     
-    <main></main>
+    <main>
+        <section>
+			<div class="container">
+				<h1>Documentação</h1>
+				<p class="introducao">O artigo do LUXIF: a fundamentação teórica, o circuito, a análise das faixas de medição, as limitações e as referências, para quem quiser entender o projeto a fundo.</p>
+				<p>
+					<a class="botao" href="../documento/LUXIF.pdf" target="_blank" rel="noopener">Abrir o PDF</a>
+					<a class="botao secundario" href="../documento/LUXIF.pdf" download>Baixar</a>
+				</p>
+			</div>
+		</section>
+
+		<section id="resumo">
+			<div class="container">
+				<h2>Resumo</h2>
+				<p>A medição da intensidade luminosa é uma etapa importante em experimentos de óptica e em aplicações de monitoramento ambiental, mas luxímetros comerciais são caros. Este trabalho apresenta o LUXIF, um projeto que mostra como montar um luxímetro simples e replicável, com microcontrolador e bateria, sem a pretensão de ser um instrumento de precisão. O sensor é um fotoresistor (LDR) de 10 mm, que forma um divisor de tensão com um entre quatro resistores de referência, escolhido automaticamente por um Arduino Uno conforme a leitura do conversor analógico-digital, o que amplia a faixa útil de medição e melhora o aproveitamento da sua resolução. A faixa em uso é indicada por LEDs que compartilham um único resistor, e o valor calculado em lux é exibido em um display OLED. O circuito é alimentado por uma bateria de 9 V ligada ao conector de alimentação da placa. A análise teórica indica que as quatro faixas se sobrepõem e cobrem, juntas, resistências de cerca de 100 Ω a 4 MΩ, o que corresponde a cerca de 0,003 a 11 000 lux. Por causa de um projeto de extensão, acrescentou-se uma versão opcional com ESP32, que transmite as leituras por Wi-Fi para uma página web.</p>
+				<p><strong>Palavras-chave:</strong> fotoresistor; instrumentação eletrônica; divisor de tensão; iluminância; Arduino; ESP32; sensores.</p>
+			</div>
+		</section>
+		<section id="artigo">
+			<div class="container">
+				<h2>Artigo completo</h2>
+				<iframe src="../documento/LUXIF.pdf" title="Artigo do LUXIF em PDF" width="100%" height="800"></iframe>
+			</div>
+		</section>
+
+		<section id="figuras">
+			<div class="container">
+				<h2>Figuras</h2>
+				<div class="grade">
+					<figure>
+						<a href="../imagens/grafico-ldr.png" target="_blank" rel="noopener"><img src="../imagens/grafico-ldr.png" alt="Curva da resistência do LDR em função da iluminância." width="757" height="435" loading="lazy"></a>
+						<figcaption>Figura 1 — Curva de resistência do LDR em função da iluminância.</figcaption>
+					</figure>
+					<figure>
+						<a href="../imagens/grafico-divisor.png" target="_blank" rel="noopener"><img src="../imagens/grafico-divisor.png" alt="Curvas da tensão do divisor para os quatro resistores de referência." width="737" height="433" loading="lazy"></a>
+						<figcaption>Figura 2 — Tensão no divisor em função da resistência do LDR, para cada resistor de referência.</figcaption>
+					</figure>
+					<figure>
+						<a href="../imagens/esquema-eletrico.svg" target="_blank" rel="noopener"><img src="../imagens/esquema-eletrico.svg" alt="Esquema elétrico do LUXIF." width="1000" height="740" loading="lazy"></a>
+						<figcaption>Figura 3 — Esquema elétrico do LUXIF.</figcaption>
+					</figure>
+				</div>
+			</div>
+		</section>
+
+		<section id="referencias">
+			<div class="container">
+				<h2>Referências</h2>
+				<ul>
+					<li>ARDUINO. <strong>Arduino Uno Rev3</strong>: documentação técnica. [S.l.]: Arduino, [s.d.]. Disponível em: <a href="https://docs.arduino.cc/hardware/uno-rev3/" target="_blank" rel="noopener">docs.arduino.cc</a>.</li>
+					<li>ESPRESSIF SYSTEMS. <strong>ESP32 Series Datasheet</strong>. Xangai: Espressif Systems, [s.d.]. Disponível em: <a href="https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf" target="_blank" rel="noopener">espressif.com</a>.</li>
+					<li>FETTE, Ian; MELNIKOV, Alexey. <strong>RFC 6455</strong>: The WebSocket Protocol. Internet Engineering Task Force, 2011. Disponível em: <a href="https://www.rfc-editor.org/rfc/rfc6455" target="_blank" rel="noopener">rfc-editor.org</a>.</li>
+					<li>HALLIDAY, David; RESNICK, Robert; WALKER, Jearl. <strong>Fundamentos de Física</strong>: Óptica e Física Moderna. 10. ed. Rio de Janeiro: LTC, 2016.</li>
+					<li>MICROCHIP TECHNOLOGY. <strong>ATmega328P</strong>: folha de dados (seção do conversor analógico-digital). [S.l.]: Microchip Technology, [s.d.]. Disponível em: <a href="https://www.microchip.com/en-us/product/ATmega328P" target="_blank" rel="noopener">microchip.com</a>.</li>
+					<li>OASIS. <strong>MQTT Version 3.1.1</strong>. OASIS Standard, 2014. Disponível em: <a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html" target="_blank" rel="noopener">docs.oasis-open.org</a>.</li>
+					<li>SCHERZ, Paul; MONK, Simon. <strong>Practical Electronics for Inventors</strong>. 3. ed. New York: McGraw-Hill Education TAB, 2013.</li>
+					<li>SENBA OPTOELECTRONICS CO., LTD. <strong>GL55 Series Photoresistor Datasheet</strong>. Shenzhen: Senba Optoelectronics, [s.d.]. Disponível em: <a href="https://www.digikey.com/en/htmldatasheets/production/2014143/0/0/1/gl5528.html" target="_blank" rel="noopener">digikey.com</a>.</li>
+				</ul>
+			</div>
+		</section>
+    </main>
 
     <footer>
 		<div class="container">
-			<p>&copy; 2026 LUXIF. Projeto integrador — IFSP Guarulhos.</p>
+			<p>&copy; 2026 LUXIF. Projeto integrador de Engenharia de Computação — IFSP Guarulhos.</p>
+			<p>A comunicação com a internet (ESP32) foi acrescentada por causa de um projeto de extensão.</p>
 		</div>
 	</footer>
+	<script src="../js/luxif.js"></script>
 </body>
 </html>

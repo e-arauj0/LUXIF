@@ -2,15 +2,17 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Funcionamento</title>
 
     <link rel="icon" href="../icones/icone.png" type="image/png">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&amp;family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+	<script src="../js/tema.js"></script>
 </head>
 <body>
     <header>
-        <div class="container">
+        <div class="painel">
             <a href="../index.html"><img class="logo" src="../imagens/logo.svg" alt="Logo LUXIF — página inicial"></a>
             <nav>
                 <ul>
@@ -19,20 +21,144 @@
                     <li><a href="componentes.html">Componentes</a></li>
                     <li><a href="montagem.html">Monte o seu</a></li>
                     <li><a href="codigo.html">Código</a></li>
-                    <li><a href="ao-vivo.html">Ao vivo</a></li>
                     <li><a href="documentacao.html">Documentação</a></li>
+                    <li><a href="ao-vivo.html">Internet (ESP32)</a></li>
                     <li><a href="equipe.html">Nosso time</a></li>
                 </ul>
             </nav>
-        </div>
-    </header>
+			<div class="ferramentas">
+				<a class="indicador-luxif" href="ao-vivo.html" title="Leitura atual do LUXIF" hidden><span></span></a>
+				<div class="seletor-tema" role="group" aria-label="Tema do site">
+					<button type="button" data-escolha="claro" aria-pressed="false" aria-label="Tema claro" title="Tema claro"><img src="../icones/claro.svg" alt="" class="icone"></button>	
+					<button type="button" data-escolha="auto" aria-pressed="true" aria-label="Tema auto" title="Tema auto"><img src="../icones/auto.svg" alt="" class="icone"></button>
+					<button type="button" data-escolha="escuro" aria-pressed="false" aria-label="Tema escuro" title="Tema escuro"><img src="../icones/escuro.svg" alt="" class="icone"></button>				
+				</div>
+			</div>
+    	</div>
+	</header>
     
-    <main></main>
+    <main>
+        <section>
+			<div class="container">
+				<h1>Como funciona</h1>
+				<p class="introducao">Do sensor ao número na tela: veja como o LUXIF transforma luz em uma medida em lux. A ideia é entender o princípio, para poder montar o seu e melhorá-lo.</p>
+			</div>
+		</section>
+
+		<section id="visao-geral">
+			<div class="container">
+				<h2>O caminho da medição</h2>
+				<ol>
+					<li>A luz chega ao LDR e muda a sua resistência: quanto mais luz, menor a resistência.</li>
+					<li>O LDR forma um divisor de tensão com um dos quatro resistores de referência. A tensão no ponto entre os dois depende da luz.</li>
+					<li>O Arduino lê essa tensão com seu conversor analógico-digital. Se ela estiver alta ou baixa demais, ele troca de resistor e lê de novo.</li>
+					<li>Com a leitura e o resistor em uso, o Arduino calcula o valor em lux e o mostra no display OLED.</li>
+				</ol>
+			</div>
+		</section>
+
+		<section id="sensor">
+			<div class="container duas-colunas">
+				<div>
+					<h2>O sensor</h2>
+					<p>O LUXIF usa um LDR (resistor dependente de luz) de 10 mm. Ele é feito de um material semicondutor, o sulfeto de cádmio: quando a luz o atinge, libera cargas elétricas e a resistência cai. Essa queda não é linear, mas segue uma lei de potência:</p>
+					<p class="formula">R = A × L<sup>−γ</sup></p>
+					<p><strong>R</strong> é a resistência do LDR, em ohms; <strong>L</strong> é a iluminância, em lux; <strong>A</strong> é a resistência do LDR em 1 lux; e <strong>γ</strong> (gama) indica o quanto a resistência cai quando a luz aumenta. A e γ vêm do datasheet e são ajustados na calibração.</p>
+				</div>
+				<figure>
+					<img src="../imagens/grafico-ldr.png" alt="Gráfico em escala logarítmica: a resistência do LDR cai de cerca de 75 kΩ em 1 lux para cerca de 120 Ω em 10 000 lux, formando uma reta." width="757" height="435">
+					<figcaption>Figura 1 — Curva de resistência do LDR em função da iluminância, em escala logarítmica. Nessa escala, a lei de potência vira uma reta.</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<section id="circuito">
+			<div class="container duas-colunas">
+				<figure>
+					<img src="../imagens/grafico-divisor.png" alt="Quatro curvas em forma de S da tensão em A0 em função da resistência do LDR, uma para cada resistor de referência, com a janela de leitura útil sombreada em verde." width="737" height="433">
+					<figcaption>Figura 2 — Tensão em A0 em função da resistência do LDR, para cada um dos quatro resistores de referência. A faixa verde é a janela de leitura útil.</figcaption>
+				</figure>
+				<div>
+					<h2>O circuito</h2>
+					<p>Cada resistor de referência (1 kΩ, 10 kΩ, 100 kΩ e 470 kΩ) está ligado a uma saída do Arduino (D2 a D5). Só uma saída fica ligada (5 V) por vez; as outras ficam como entrada, o que na prática desconecta seus resistores. O resistor ligado e o LDR formam um divisor de tensão, e o ponto entre eles vai para a entrada analógica A0:</p>
+					<p class="formula">V = 5 V × R<sub>LDR</sub> ÷ (R<sub>n</sub> + R<sub>LDR</sub>)</p>
+					<p>R<sub>n</sub> é o resistor em uso. Como as duas resistências são sempre positivas, a fração fica entre 0 e 1: a tensão lida nunca passa de 5 V, o limite da entrada A0. Os LEDs azuis que indicam a faixa ficam em saídas próprias (D8 a D11), fora do divisor, para não interferir na medição.</p>
+				</div>
+			</div>
+		</section>
+
+		<section id="calculo">
+			<div class="container">
+				<h2>Do sinal ao lux</h2>
+				<p>A cada volta do programa, o Arduino:</p>
+				<ol>
+					<li>lê a entrada A0 dez vezes seguidas e tira a média, obtendo um número N entre 0 e 1023;</li>
+					<li>confere se N está entre 100 e 920 (cerca de 0,5 V e 4,5 V). Acima disso, o ambiente está escuro para a faixa e ele passa para um resistor maior; abaixo, está claro demais e ele passa para um menor;</li>
+					<li>calcula a resistência do LDR pelo divisor: R<sub>LDR</sub> = R<sub>n</sub> × N ÷ (1023 − N);</li>
+					<li>converte a resistência em lux invertendo a curva do sensor: L = (A ÷ R<sub>LDR</sub>)<sup>1/γ</sup>;</li>
+					<li>mostra o resultado no display, com o LED da faixa aceso.</li>
+				</ol>
+				<div class="aviso">
+					<strong>Ajuste para o seu sensor:</strong> os valores de A e γ do código são típicos e podem não servir ao seu LDR. Veja como ajustá-los em <a href="#calibracao">Como ajustar ao seu sensor</a>.
+				</div>
+			</div>
+		</section>
+
+		<section id="alcance">
+			<div class="container">
+				<h2>Alcance estimado</h2>
+				<p>O código só calcula o lux quando a leitura N está entre 100 e 920. Pelo divisor, R<sub>LDR</sub> = R<sub>n</sub> × N ÷ (1023 − N), então, em cada faixa, a resistência do LDR vai de 0,108 × R<sub>n</sub> (N = 100) a 8,93 × R<sub>n</sub> (N = 920). Convertendo com a curva do código (A = 75 000 Ω e γ = 0,7), L = (A ÷ R<sub>LDR</sub>)<sup>1/γ</sup>:</p>
+				<div class="tabela-rolagem">
+					<table>
+						<thead>
+							<tr><th>Resistor (R<sub>n</sub>)</th><th>R<sub>LDR</sub> medida</th><th>Lux (estimativa teórica)</th></tr>
+						</thead>
+						<tbody>
+							<tr><td>1 kΩ</td><td>108 Ω a 8,9 kΩ</td><td>de 21 a 11 400</td></tr>
+							<tr><td>10 kΩ</td><td>1,08 kΩ a 89 kΩ</td><td>de 0,8 a 430</td></tr>
+							<tr><td>100 kΩ</td><td>10,8 kΩ a 893 kΩ</td><td>de 0,03 a 16</td></tr>
+							<tr><td>470 kΩ</td><td>51 kΩ a 4,2 MΩ</td><td>de 0,003 a 1,7</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p>As quatro faixas se sobrepõem, o que evita "buracos" na medição, e juntas cobrem de cerca de <strong>0,003 a 11 000 lux</strong>, da penumbra à claridade. Esses números são uma <strong>estimativa teórica</strong>, calculada com as constantes típicas do código. Na prática, o alcance real depende do seu LDR, e as medidas nas pontas da escala são as menos confiáveis (veja as limitações abaixo). Para medir a luz do sol direta, que passa de 30 000 lux, coloque um filtro difusor na frente do sensor.</p>
+				<p><strong>Bateria.</strong> Com o Arduino Uno, uma bateria de 9 V dura várias horas. A versão com ESP32 consome mais por causa do Wi-Fi; para uso prolongado, alimente-a pela USB ou por uma fonte.</p>
+			</div>
+		</section>
+
+		<section id="calibracao">
+			<div class="container">
+				<h2>Como ajustar ao seu sensor</h2>
+				<p>As constantes A e γ do código são valores típicos. Dois LDRs do mesmo modelo podem ter curvas bem diferentes, então, para valores melhores, compare o seu LUXIF com um luxímetro de referência. Tomando o logaritmo da curva do sensor, R = A × L<sup>−γ</sup> vira uma reta:</p>
+				<p class="formula">ln R = ln A − γ × ln L</p>
+				<p>Meça a resistência do LDR em duas iluminâncias conhecidas, (L<sub>1</sub>, R<sub>1</sub>) e (L<sub>2</sub>, R<sub>2</sub>), calculando cada R pela fórmula do divisor. Então:</p>
+				<p class="formula">γ = ln(R<sub>1</sub> ÷ R<sub>2</sub>) ÷ ln(L<sub>2</sub> ÷ L<sub>1</sub>) &nbsp;&nbsp; e &nbsp;&nbsp; A = R<sub>1</sub> × L<sub>1</sub><sup>γ</sup></p>
+				<p>Para conferir a conta, use os pontos da Figura 1: 75 kΩ em 1 lux e cerca de 120 Ω em 10 000 lux dão γ = ln(625) ÷ ln(10 000) ≈ 0,70 e A = 75 000 Ω, os valores do código. Troque as constantes <code>A</code> e <code>GAMA</code> pelas suas e grave de novo.</p>
+			</div>
+		</section>
+
+		<section id="limitacoes">
+			<div class="container">
+				<h2>Limitações</h2>
+				<p>O LUXIF é uma base para aprender a montar um luxímetro, não um instrumento de precisão. Vale conhecer o que limita a exatidão:</p>
+				<ul>
+					<li><strong>O sensor.</strong> O LDR não segue exatamente a lei de potência em toda a escala, muda um pouco com a temperatura e responde devagar a variações de luz (o tempo depende do modelo; veja o datasheet). Ele também não reage às cores como o olho humano: luzes de LED, fluorescentes e do sol podem dar leituras diferentes para a mesma iluminância.</li>
+					<li><strong>A leitura analógica.</strong> O datasheet do ATmega328P, o microcontrolador do Uno, recomenda que o sinal lido pelo ADC tenha impedância de cerca de 10 kΩ ou menos. Nas faixas de 100 kΩ e 470 kΩ, com o LDR no escuro, a impedância é muito maior, e a leitura fica menos exata. A média de 10 leituras e a espera de 10 ms depois de trocar de faixa ajudam, mas não eliminam o problema.</li>
+					<li><strong>Sem capacitor em A0.</strong> Parece uma boa ideia filtrar o ruído com um capacitor, mas com resistências de até alguns MΩ, um capacitor de 100 nF formaria um filtro RC de constante de tempo da ordem de 0,4 s, muito maior que os 10 ms de espera do código, e a leitura ficaria errada logo depois de cada troca de faixa.</li>
+					<li><strong>O pino de saída.</strong> A saída do Arduino que fornece os 5 V tem uma resistência interna de algumas dezenas de ohms, que se soma ao resistor de referência. Na faixa de 1 kΩ isso já pesa alguns por cento.</li>
+					<li><strong>A calibração.</strong> Sem comparar com um luxímetro de referência, os valores em lux são estimativas (veja a seção anterior).</li>
+				</ul>
+				<p>Cada limitação aponta uma melhoria possível: trocar o LDR por outro sensor de luz, calibrar contra uma referência ou colocar um amplificador de ganho unitário (buffer) antes de A0, para que o ADC enxergue uma impedância baixa.</p>
+			</div>
+		</section>
+    </main>
     
     <footer>
 		<div class="container">
-			<p>&copy; 2026 LUXIF. Projeto integrador — IFSP Guarulhos.</p>
+			<p>&copy; 2026 LUXIF. Projeto integrador de Engenharia de Computação — IFSP Guarulhos.</p>
+			<p>A comunicação com a internet (ESP32) foi acrescentada por causa de um projeto de extensão.</p>
 		</div>
 	</footer>
+	<script src="../js/luxif.js"></script>
 </body>
 </html>

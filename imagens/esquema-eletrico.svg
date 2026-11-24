@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 740" width="1000" height="740" role="img" aria-labelledby="titulo descricao" font-family="Roboto, Arial, Helvetica, sans-serif">
+  <title id="titulo">Esquema elétrico do LUXIF</title>
+  <desc id="descricao">Arduino Uno ligado a quatro resistores de referência em D2 a D5, que se unem no ponto do divisor ligado a A0 e ao LDR; a quatro LEDs azuis em D8 a D11, com os catodos unidos e um único resistor de 1 kΩ até o GND; ao display OLED por 5V, GND, SDA e SCL; e a uma bateria de 9 V que passa por uma chave e chega ao conector de energia.</desc>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d2b3a"/>
+    </marker>
+  </defs>
+
+  <style>
+    .fio { stroke: #1d2b3a; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .comp { stroke: #1d2b3a; stroke-width: 2; fill: #ffffff; stroke-linejoin: round; }
+    .placa { stroke: #1d2b3a; stroke-width: 3; fill: #eef3f8; }
+    .no { fill: #1d2b3a; }
+    .luz { stroke: #1d2b3a; stroke-width: 1.6; fill: none; marker-end: url(#seta); }
+    text { fill: #1d2b3a; font-size: 15px; }
+    .pino { font-size: 14px; font-weight: 700; }
+    .peq { font-size: 13px; }
+    .tit { font-size: 22px; font-weight: 700; }
+    .rot { font-size: 15px; font-weight: 700; }
+    .azul { fill: #bfdcff; }
+  </style>
+
+  <rect x="0" y="0" width="1000" height="740" rx="12" fill="#ffffff"/>
+
+  <!-- ===== Arduino Uno ===== -->
+  <rect class="placa" x="380" y="150" width="240" height="490" rx="6"/>
+  <text class="tit" x="500" y="390" text-anchor="middle">Arduino Uno</text>
+
+  <!-- ===== Display OLED (topo) ===== -->
+  <rect class="comp" x="400" y="30" width="200" height="58" rx="4"/>
+  <text class="rot" x="500" y="55" text-anchor="middle">Display OLED</text>
+  <text class="peq" x="500" y="74" text-anchor="middle">SSD1306, I²C</text>
+  <g class="fio">
+    <path d="M420 88 V150"/><path d="M470 88 V150"/><path d="M530 88 V150"/><path d="M580 88 V150"/>
+  </g>
+  <g class="peq" text-anchor="middle">
+    <text x="420" y="106">GND</text><text x="470" y="106">VCC</text><text x="530" y="106">SDA</text><text x="580" y="106">SCL</text>
+  </g>
+  <g class="pino" text-anchor="middle">
+    <text x="420" y="172">GND</text><text x="470" y="172">5V</text><text x="530" y="172">SDA</text><text x="580" y="172">SCL</text>
+    <text class="peq" x="530" y="188">(A4)</text><text class="peq" x="580" y="188">(A5)</text>
+  </g>
+
+  <!-- ===== Lado direito: resistores de referência, ponto do divisor, LDR ===== -->
+  <g class="fio">
+    <path d="M620 200 H690"/><path d="M770 200 H840"/>
+    <path d="M620 250 H690"/><path d="M770 250 H840"/>
+    <path d="M620 300 H690"/><path d="M770 300 H840"/>
+    <path d="M620 350 H690"/><path d="M770 350 H840"/>
+    <path d="M840 200 V500"/>
+    <path d="M620 450 H840"/>
+    <path d="M840 560 V610"/>
+  </g>
+  <g class="comp">
+    <rect x="690" y="190" width="80" height="20"/>
+    <rect x="690" y="240" width="80" height="20"/>
+    <rect x="690" y="290" width="80" height="20"/>
+    <rect x="690" y="340" width="80" height="20"/>
+    <rect x="828" y="500" width="24" height="60"/>
+  </g>
+  <g class="no">
+    <circle cx="840" cy="250" r="4"/><circle cx="840" cy="300" r="4"/><circle cx="840" cy="350" r="4"/><circle cx="840" cy="450" r="4"/>
+  </g>
+  <g class="pino" text-anchor="end">
+    <text x="610" y="205">D2</text><text x="610" y="255">D3</text><text x="610" y="305">D4</text><text x="610" y="355">D5</text><text x="610" y="455">A0</text>
+  </g>
+  <g class="rot" text-anchor="middle">
+    <text x="730" y="182">1 kΩ</text><text x="730" y="232">10 kΩ</text><text x="730" y="282">100 kΩ</text><text x="730" y="332">470 kΩ</text>
+  </g>
+  <text class="peq" x="856" y="400">ponto do divisor</text>
+  <text class="rot" x="868" y="535">LDR</text>
+  <path class="luz" d="M796 498 L823 520"/>
+  <path class="luz" d="M790 516 L817 538"/>
+  <!-- terra do LDR -->
+  <g class="fio"><path d="M826 610 H854"/><path d="M831 616 H849"/><path d="M836 622 H844"/></g>
+
+  <!-- ===== Lado esquerdo: LEDs azuis e resistor único ===== -->
+  <g class="fio">
+    <path d="M380 200 H300"/><path d="M260 200 H140"/>
+    <path d="M380 250 H300"/><path d="M260 250 H140"/>
+    <path d="M380 300 H300"/><path d="M260 300 H140"/>
+    <path d="M380 350 H300"/><path d="M260 350 H140"/>
+    <path d="M140 200 V400"/>
+    <path d="M140 460 V500"/>
+  </g>
+  <!-- LEDs: triângulo do ânodo (lado do pino) para o catodo (barra, lado do resistor) -->
+  <g class="comp azul">
+    <path d="M300 188 V212 L260 200 Z"/>
+    <path d="M300 238 V262 L260 250 Z"/>
+    <path d="M300 288 V312 L260 300 Z"/>
+    <path d="M300 338 V362 L260 350 Z"/>
+  </g>
+  <g class="fio">
+    <path d="M260 187 V213"/><path d="M260 237 V263"/><path d="M260 287 V313"/><path d="M260 337 V363"/>
+  </g>
+  <g>
+    <path class="luz" d="M282 183 L270 168"/><path class="luz" d="M294 183 L282 168"/>
+    <path class="luz" d="M282 233 L270 218"/><path class="luz" d="M294 233 L282 218"/>
+    <path class="luz" d="M282 283 L270 268"/><path class="luz" d="M294 283 L282 268"/>
+    <path class="luz" d="M282 333 L270 318"/><path class="luz" d="M294 333 L282 318"/>
+  </g>
+  <g class="no">
+    <circle cx="140" cy="250" r="4"/><circle cx="140" cy="300" r="4"/><circle cx="140" cy="350" r="4"/>
+  </g>
+  <g class="pino">
+    <text x="390" y="205">D8</text><text x="390" y="255">D9</text><text x="390" y="305">D10</text><text x="390" y="355">D11</text>
+  </g>
+  <text class="rot" x="280" y="146" text-anchor="middle">LEDs azuis (um por faixa)</text>
+  <!-- resistor único -->
+  <rect class="comp" x="130" y="400" width="20" height="60"/>
+  <text class="rot" x="164" y="425">1 kΩ</text>
+  <text class="peq" x="164" y="443">um só para os 4 LEDs</text>
+  <g class="fio"><path d="M126 500 H154"/><path d="M131 506 H149"/><path d="M136 512 H144"/></g>
+
+  <!-- ===== Alimentação: bateria, chave e conector ===== -->
+  <text class="peq" x="394" y="520" fill="#1d2b3a">Conector de energia (P4)</text>
+  <g class="fio">
+    <path d="M380 560 H300"/><path d="M262 560 H120 V600"/>
+    <path d="M120 640 V690 H300 V610 H380"/>
+    <path d="M500 640 V660"/>
+  </g>
+  <!-- chave -->
+  <g class="fio"><path d="M300 560 L268 540"/></g>
+  <g class="no"><circle cx="300" cy="560" r="4"/><circle cx="262" cy="560" r="4"/></g>
+  <text class="peq" x="281" y="528" text-anchor="middle">chave</text>
+  <!-- bateria: placa longa (+) em cima, curta (−) embaixo -->
+  <g class="fio">
+    <path d="M96 600 H144" stroke-width="3"/>
+    <path d="M106 618 H134" stroke-width="6"/>
+    <path d="M120 618 V640"/>
+  </g>
+  <text class="rot" x="84" y="615" text-anchor="end">9 V</text>
+  <text class="rot" x="150" y="596">+</text>
+  <text class="rot" x="150" y="640">−</text>
+  <text class="peq" x="84" y="633" text-anchor="end">bateria</text>
+  <g class="pino">
+    <text x="390" y="565">+</text><text x="390" y="615">−</text>
+  </g>
+  <g class="no"><circle cx="300" cy="690" r="4"/></g>
+  <!-- terras -->
+  <g class="fio">
+    <path d="M300 690 V700"/><path d="M286 700 H314"/><path d="M291 706 H309"/><path d="M296 712 H304"/>
+    <path d="M486 660 H514"/><path d="M491 666 H509"/><path d="M496 672 H504"/>
+  </g>
+  <text class="pino" x="500" y="632" text-anchor="middle">GND</text>
+
+  <text class="peq" x="640" y="700" text-anchor="middle">Todos os símbolos de terra são o mesmo ponto (GND).</text>
+  <text class="peq" x="640" y="722" text-anchor="middle">Só um dos pinos D2 a D5 fica em nível alto por vez; os outros ficam como entrada.</text>
+</svg>
