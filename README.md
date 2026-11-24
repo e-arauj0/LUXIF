@@ -29,4 +29,8 @@ luxif
 |   |- luxif_wifi/      # Versão com Wi-Fi, para o ESP32
 |- documento/           # Artigo sobre o hardware (PDF)
 |   |- latex/           # Código-fonte do artigo em LaTeX
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> origin/estrutura
