@@ -1,265 +1,256 @@
-const luxif = {
-	estado: "desconectado",
-	mensagem: "Desconectado.",
-	ultimaLeitura: null,
 
-	// A página Internet (ESP32) troca estas funções para mostrar os dados
-	aoMudarEstado: function () {},
-	aoReceberLeitura: function () {},
-	aoReceberMensagem: function () {}
+const luxif = {
+    estado: "desconectado",
+    mensagem: "Desconectado.",
+    ultimaLeitura: null,
+
+    // Formata valores numéricos para o padrão brasileiro
+    formatarLux(valor) {
+        return Number(valor).toLocaleString("pt-BR", {
+            maximumFractionDigits: 2
+        });
+    },
+
+    aoMudarEstado() {},
+    aoReceberLeitura() {},
+    aoReceberMensagem() {}
 };
 
-(function () {
-	const SERVIDOR_MQTT = "wss://broker.hivemq.com:8884/mqtt";
-	const BIBLIOTECA_MQTT = "https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js";
-	const CANAL = "ifsp-luxif/";
+(() => {
+    const ENDERECO_WS = "wss://rk322x-box.tail96f38b.ts.net";
 
-	let clienteMqtt = null;
-	let socket = null;
-	let simulacao = null;
-	let novaTentativa = null;
-	let semLeituras = null;
+    let socket = null;
+    let temporizadorReconexao = null;
+    let modoAtual = null;
+    let simulacaoAtiva = false;
+    let temporizadorSimulacao = null;
 
-	function ler(armazenamento, chave) {
-		try {
-			return armazenamento.getItem(chave);
-		} catch (erro) {
-			return null;
-		}
-	}
+    // ========================================
+    // ESTADO DA CONEXAO
+    // ========================================
 
-	function gravar(armazenamento, chave, valor) {
-		try {
-			if (valor === null) {
-				armazenamento.removeItem(chave);
-			} else {
-				armazenamento.setItem(chave, valor);
-			}
-		} catch (erro) {}
-	}
+    function mudarEstado(estado, mensagem) {
+        luxif.estado = estado;
+        luxif.mensagem = mensagem;
 
-	luxif.formatarLux = function (lux) {
-		return lux.toLocaleString("pt-BR", { maximumFractionDigits: lux < 10 ? 1 : 0 });
-	};
+        luxif.aoMudarEstado(estado, mensagem);
+    }
 
-	function atualizarIndicador() {
-		const indicador = document.querySelector(".indicador-luxif");
-		const ativo = luxif.estado === "conectado" || luxif.estado === "simulando";
+    // ========================================
+    // RECEBIMENTO DAS LEITURAS
+    // ========================================
 
-		indicador.hidden = !(ativo && luxif.ultimaLeitura);
-		if (luxif.ultimaLeitura) {
-			indicador.querySelector("span").textContent = luxif.formatarLux(luxif.ultimaLeitura.lux) + " lx";
-		}
-	}
+    function receber(dados) {
+        if (
+            !dados ||
+            typeof dados.lux !== "number" ||
+            typeof dados.percentage !== "number"
+        ) {
+            return;
+        }
 
-	function mudarEstado(estado, mensagem) {
-		luxif.estado = estado;
-		luxif.mensagem = mensagem;
-		atualizarIndicador();
-		luxif.aoMudarEstado();
-	}
+        luxif.ultimaLeitura = dados;
 
-	function receber(leitura) {
-		luxif.ultimaLeitura = leitura;
-		temaLuxif.informarLux(leitura.lux);
-		atualizarIndicador();
-		luxif.aoReceberLeitura(leitura);
-	}
+        if (
+            window.temaLuxif &&
+            typeof window.temaLuxif.informarLux === "function"
+        ) {
+            window.temaLuxif.informarLux(dados.lux);
+        }
 
-	// O LUXIF manda {"lux":523.4,"percentage":100,"faixa":1}. O servidor do Vinícius
-	// manda só lux e percentage (sem faixa), e um número sozinho também serve
-	function lerMensagem(texto) {
-		try {
-			const dados = JSON.parse(texto);
-			if (typeof dados === "number") return { lux: dados };
-			if (typeof dados.lux === "number") return dados;
-		} catch (erro) {}
-		return null;
-	}
+        luxif.aoReceberLeitura(dados);
+    }
 
-	function parar() {
-		clearTimeout(novaTentativa);
-		clearTimeout(semLeituras);
-		clearInterval(simulacao);
+    // ========================================
+    // CONEXAO WEBSOCKET
+    // ========================================
 
-		if (clienteMqtt) {
-			clienteMqtt.end(true);
-			clienteMqtt = null;
-		}
+    function conectarWebSocket(endereco) {
+        clearTimeout(temporizadorReconexao);
 
-		if (socket) {
-			socket.onclose = null;
-			socket.close();
-			socket = null;
-		}
-	}
+        if (socket) {
+            socket.onclose = null;
+            socket.close();
+            socket = null;
+        }
 
-	/* Pela internet: o ESP32 publica no servidor MQTT e o site assina o mesmo canal */
+        mudarEstado("conectando", "Conectando ao servidor...");
 
-	function carregarBibliotecaMqtt(depois) {
-		if (window.mqtt) {
-			depois();
-			return;
-		}
+        try {
+            socket = new WebSocket(endereco);
 
-		const script = document.createElement("script");
-		script.src = BIBLIOTECA_MQTT;
-		script.onload = depois;
-		script.onerror = function () {
-			mudarEstado("erro", "Não foi possível carregar a biblioteca MQTT. Verifique a conexão com a internet.");
-		};
-		document.head.appendChild(script);
-	}
+            socket.onopen = () => {
+                mudarEstado("conectado", "Conectado ao servidor.");
 
-	function esperarLeituras() {
-		clearTimeout(semLeituras);
-		semLeituras = setTimeout(function () {
-			mudarEstado("aguardando", "Conectado ao servidor, mas o LUXIF não envia leituras há 10 segundos. Ele está ligado e no Wi-Fi?");
-		}, 10000);
-	}
+                luxif.aoReceberMensagem(
+                    "Conexão estabelecida."
+                );
+            };
 
-	function abrirInternet() {
-		mudarEstado("conectando", "Conectando ao servidor MQTT…");
+            socket.onmessage = (evento) => {
+                try {
+                    const dados = JSON.parse(evento.data);
+                    receber(dados);
 
-		carregarBibliotecaMqtt(function () {
-			if (luxif.modo() !== "internet") return;
-			clienteMqtt = mqtt.connect(SERVIDOR_MQTT);
+                } catch (erro) {
+                    luxif.aoReceberMensagem(
+                        "Mensagem recebida não é um JSON válido."
+                    );
+                }
+            };
 
-			clienteMqtt.on("connect", function () {
-				clienteMqtt.subscribe([CANAL + "leituras", CANAL + "respostas"]);
-				mudarEstado("aguardando", "Conectado ao servidor. Esperando as leituras do LUXIF…");
-				esperarLeituras();
-			});
+            socket.onerror = () => {
+                mudarEstado(
+                    "erro",
+                    "Erro na conexão WebSocket."
+                );
+            };
 
-			clienteMqtt.on("message", function (canal, dados) {
-				const texto = dados.toString();
-				luxif.aoReceberMensagem(texto);
-				if (canal !== CANAL + "leituras") return;
+            socket.onclose = () => {
+                if (modoAtual === "internet" && !simulacaoAtiva) {
+                    mudarEstado(
+                        "desconectado",
+                        "Conexão perdida. Tentando novamente..."
+                    );
 
-				const leitura = lerMensagem(texto);
-				if (!leitura) return;
+                    temporizadorReconexao = setTimeout(() => {
+                        conectarWebSocket(ENDERECO_WS);
+                    }, 5000);
 
-				if (luxif.estado !== "conectado") {
-					mudarEstado("conectado", "Recebendo as leituras do LUXIF pela internet.");
-				}
-				esperarLeituras();
-				receber(leitura);
-			});
+                } else {
+                    mudarEstado(
+                        "desconectado",
+                        "Desconectado."
+                    );
+                }
+            };
 
-			clienteMqtt.on("offline", function () {
-				clearTimeout(semLeituras);
-				mudarEstado("erro", "Sem conexão com o servidor MQTT. Tentando de novo…");
-			});
-		});
-	}
+        } catch (erro) {
+            mudarEstado(
+                "erro",
+                "Não foi possível criar a conexão WebSocket."
+            );
 
-	/* Na mesma rede: o site conecta direto no ESP32 pelo endereço IP */
+            console.error("Erro WebSocket:", erro);
+        }
+    }
 
-	function abrirLocal(endereco) {
-		mudarEstado("conectando", "Conectando a " + endereco + "…");
+    // ========================================
+    // CONEXAO PELA INTERNET
+    // ========================================
 
-		try {
-			socket = new WebSocket(endereco);
-		} catch (erro) {
-			mudarEstado("erro", "O navegador bloqueou a conexão com " + endereco + ".");
-			return;
-		}
+    luxif.conectarInternet = function () {
+        simulacaoAtiva = false;
+        modoAtual = "internet";
 
-		socket.onopen = function () {
-			// O servidor do Vinícius só registra o cliente depois da primeira mensagem
-			socket.send("conectado");
-			mudarEstado("conectado", "Conectado a " + endereco + ".");
-		};
+        localStorage.setItem("luxif_modo", "internet");
+        localStorage.setItem("luxif_endereco", ENDERECO_WS);
 
-		socket.onmessage = function (evento) {
-			luxif.aoReceberMensagem(evento.data);
-			const leitura = lerMensagem(evento.data);
-			if (leitura) receber(leitura);
-		};
+        conectarWebSocket(ENDERECO_WS);
+    };
 
-		socket.onclose = function () {
-			socket = null;
-			mudarEstado("erro", "Sem resposta do LUXIF em " + endereco + ". Tentando de novo em 5 segundos…");
-			novaTentativa = setTimeout(function () {
-				abrirLocal(endereco);
-			}, 5000);
-		};
-	}
+    // ========================================
+    // CONEXAO LOCAL
+    // ========================================
 
-	/* Simulação: leituras inventadas, para testar sem o aparelho */
+    luxif.conectarLocal = function (endereco) {
+        simulacaoAtiva = false;
+        modoAtual = "local";
 
-	function simular() {
-		mudarEstado("simulando", "Simulação: leituras geradas pelo site, sem o aparelho.");
-		let segundos = 0;
+        let url = endereco.trim();
 
-		simulacao = setInterval(function () {
-			segundos += 0.5;
-			const lux = 300 + 290 * Math.sin(segundos / 6) + Math.random() * 10;
-			const faixa = lux > 400 ? 0 : 1;
-			receber({ lux: lux, faixa: faixa });
-		}, 500);
-	}
+        if (!/^wss?:\/\//i.test(url)) {
+            url = "ws://" + url;
+        }
 
-	luxif.conectarInternet = function () {
-		parar();
-		gravar(sessionStorage, "luxif-modo", "internet");
-		abrirInternet();
-	};
+        localStorage.setItem("luxif_modo", "local");
+        localStorage.setItem("luxif_endereco", url);
 
-	luxif.conectarLocal = function (endereco) {
-		endereco = endereco.trim();
-		if (!endereco.startsWith("ws")) endereco = "ws://" + endereco;
-		// Sem caminho no endereço, usa /ws (porta 80, a padrão): ws://192.168.0.10/ws
-		if (endereco.replace("://", "").indexOf("/") === -1) endereco = endereco + "/ws";
+        conectarWebSocket(url);
 
-		parar();
-		gravar(localStorage, "luxif-endereco", endereco);
-		gravar(sessionStorage, "luxif-modo", "local");
-		abrirLocal(endereco);
-		return endereco;
-	};
+        return url;
+    };
 
-	luxif.simular = function () {
-		parar();
-		gravar(sessionStorage, "luxif-modo", "simulacao");
-		simular();
-	};
+    // ========================================
+    // DESCONECTAR
+    // ========================================
 
-	luxif.desconectar = function () {
-		parar();
-		gravar(sessionStorage, "luxif-modo", null);
-		luxif.ultimaLeitura = null;
-		temaLuxif.esquecerLux();
-		mudarEstado("desconectado", "Desconectado.");
-	};
+    luxif.desconectar = function () {
+        modoAtual = null;
+        simulacaoAtiva = false;
 
-	luxif.enviar = function (texto) {
-		if (clienteMqtt && clienteMqtt.connected) {
-			clienteMqtt.publish(CANAL + "mensagens", texto);
-			return true;
-		}
-		if (socket && socket.readyState === WebSocket.OPEN) {
-			socket.send(texto);
-			return true;
-		}
-		return false;
-	};
+        clearTimeout(temporizadorReconexao);
+        clearInterval(temporizadorSimulacao);
 
-	luxif.enderecoSalvo = function () {
-		return ler(localStorage, "luxif-endereco");
-	};
+        if (socket) {
+            socket.onclose = null;
+            socket.close();
+            socket = null;
+        }
 
-	luxif.modo = function () {
-		return ler(sessionStorage, "luxif-modo");
-	};
+        mudarEstado("desconectado", "Desconectado.");
+    };
 
-	// Continua conectado (ou simulando) ao trocar de página
-	const modo = luxif.modo();
-	if (modo === "internet") {
-		abrirInternet();
-	} else if (modo === "local" && luxif.enderecoSalvo()) {
-		abrirLocal(luxif.enderecoSalvo());
-	} else if (modo === "simulacao") {
-		simular();
-	}
+    // ========================================
+    // SIMULACAO
+    // ========================================
+
+    luxif.simular = function () {
+        luxif.desconectar();
+
+        simulacaoAtiva = true;
+
+        mudarEstado(
+            "conectado",
+            "Modo de simulação ativo."
+        );
+
+        temporizadorSimulacao = setInterval(() => {
+            const lux = Math.round(Math.random() * 20000);
+
+            receber({
+                lux: lux,
+                resistance: null,
+                percentage: Math.min(
+                    100,
+                    Math.round(lux / 200)
+                ),
+                simulated: true
+            });
+
+        }, 1000);
+    };
+
+    // ========================================
+    // ENVIO DE MENSAGENS
+    // ========================================
+
+    luxif.enviar = function (mensagem) {
+        if (
+            socket &&
+            socket.readyState === WebSocket.OPEN
+        ) {
+            socket.send(mensagem);
+            return true;
+        }
+
+        luxif.aoReceberMensagem(
+            "Não há conexão ativa para enviar mensagens."
+        );
+
+        return false;
+    };
+
+    // ========================================
+    // PREFERENCIAS SALVAS
+    // ========================================
+
+    luxif.enderecoSalvo = function () {
+        return localStorage.getItem("luxif_endereco") || ENDERECO_WS;
+    };
+
+    luxif.modo = function () {
+        return localStorage.getItem("luxif_modo") || "internet";
+    };
+
 })();
