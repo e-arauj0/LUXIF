@@ -737,7 +737,7 @@ float calcularLux(int leitura) {
   return pow(A / resistenciaLdr, 1.0 / GAMA);
 }
 
-// FUNÇÃO DA ANIMAÇÃO DE BOOT (Roda apenas uma vez)
+// Função da animação boot (para rodar apenas uma vez)
 void rodarAnimacaoBoot() {
   for (uint16_t i = 0; i < numFrames; i++) {
     display.clearDisplay();
@@ -816,7 +816,7 @@ void setup() {
   display.clearDisplay();
   display.display();
 
-  // 👉 A ANIMAÇÃO É CHAMADA AQUI APENAS UMA VEZ NO INÍCIO
+  // Chamada da animação incial
   rodarAnimacaoBoot();
 }
 
