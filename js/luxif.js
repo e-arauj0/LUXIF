@@ -195,30 +195,30 @@ const luxif = {
     // SIMULACAO
     // ========================================
 
-    luxif.simular = function () {
-        luxif.desconectar();
-
+    luxif.simular = function (luxMaximo = 11000) {
+        clearInterval(temporizadorSimulacao);
+        clearTimeout(temporizadorReconexao);
+    
+        if (socket) {
+            socket.onclose = null;
+            socket.close();
+            socket = null;
+        }
+    
         simulacaoAtiva = true;
-
-        mudarEstado(
-            "conectado",
-            "Modo de simulação ativo."
-        );
-
+        modoAtual = "simulacao";
+        mudarEstado("simulando", "Simulação: leituras geradas pelo site, sem o aparelho.");
+    
+        let segundos = 0;
+    
         temporizadorSimulacao = setInterval(() => {
-            const lux = Math.round(Math.random() * 20000);
-
-            receber({
-                lux: lux,
-                resistance: null,
-                percentage: Math.min(
-                    100,
-                    Math.round(lux / 200)
-                ),
-                simulated: true
-            });
-
-        }, 1000);
+            segundos += 0.2;
+            const lux = Math.max(0, 300 + 290 * Math.sin(segundos / 6) + Math.random() * 10);
+            const percentage = Math.min(100, Math.max(0, (lux / luxMaximo) * 100));
+            const faixa = lux > 400 ? 0 : 1;
+    
+            receber({ lux, percentage, faixa });
+        }, 200);
     };
 
     // ========================================
